@@ -1,2 +1,2 @@
-# um6p-cs-introdb-project1-Baddou
+# um6p-cs-introdb-project2-Baddou
 Data Management 1 project.
