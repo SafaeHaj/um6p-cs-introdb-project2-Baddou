@@ -5,9 +5,9 @@ This is a repository containing our very first project in database management in
 Supervised by Professor Karima Echihabi.
 
 ### Group Members:
-Baddou Mounia
-Azoubi Othmane
-Hajjout Safae
+Baddou Mounia <br>
+Azoubi Othmane <br>
+Hajjout Safae <br>
 Labzae Kawtar
 
 
