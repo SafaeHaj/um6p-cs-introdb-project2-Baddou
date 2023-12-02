@@ -2,6 +2,9 @@ drop database project2;
 CREATE DATABASE Project2;
 use project2;
 
+---------------------------------------------------------------------------
+----- Tables Creation
+---------------------------------------------------------------------------
 
 CREATE TABLE FidelityCard(
     fctype VARCHAR(20) NOT NULL,
@@ -117,5 +120,39 @@ CREATE TABLE AirplaneModel(
     model VARCHAR(20),
     PRIMARY KEY (model)
 );
+---------------------------------------------------------------------------
+----- Index Creation
+---------------------------------------------------------------------------
+CREATE INDEX uchecks
+ON Checks(uemail);
 
+CREATE INDEX fticket
+ON Ticket(fid);
 
+CREATE INDEX ureservation
+ON Reservation(uemail);
+
+CREATE INDEX dep_dest
+ON Flight(departure, destination, departureTime);
+
+---------------------------------------------------------------------------
+----- Trigger Creation
+---------------------------------------------------------------------------
+
+CREATE TRIGGER checkValidReservation
+BEFORE INSERT ON Reservation
+FOR EACH ROW
+BEGIN
+    DECLARE adult_count INT;
+
+    -- number of accompanying adults 
+    SELECT COUNT(*) INTO adult_count
+    FROM Ticket
+    INNER JOIN Passenger ON Ticket.passportID = Passenger.passportID
+    WHERE Ticket.rid = NEW.rid AND YEAR(CURDATE()) - YEAR(Passenger.pbirthDate) >= 16;
+
+    IF adult_count = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Reservation refused. No accompanying adult is registered.';
+    END IF;
+END;
