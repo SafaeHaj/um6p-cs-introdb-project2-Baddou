@@ -6,7 +6,7 @@ GRANT SELECT ON project2.Checks TO 'admin';
 GRANT ALL ON project2.Reservation TO 'admin';
 GRANT SELECT ON project2.Flight TO 'user';
 
-DELIMITER $$
+DELIMITER //
 CREATE PROCEDURE CreateReservationView(IN user_email VARCHAR(32))
 BEGIN
 	DECLARE @view_name AS VARCHAR(46)
@@ -22,10 +22,10 @@ BEGIN
 	PREPARE stmt FROM @sql_query;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
-END $$
+END //
 DELIMITER;
 
-DELIMITER $$
+DELIMITER //
 CREATE PROCEDURE CreatePassengerView(IN user_email VARCHAR(32))
 BEGIN
 	DECLARE @view_name AS VARCHAR(46)
@@ -44,5 +44,5 @@ BEGIN
 	PREPARE stmt FROM @sql_query;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
-END $$
+END //
 DELIMITER;
