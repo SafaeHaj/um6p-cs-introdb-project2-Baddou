@@ -6,8 +6,10 @@ use project2;
 CREATE TABLE FidelityCard(
     fctype VARCHAR(20) NOT NULL,
     reduction INT NOT NULL,
-    PRIMARY KEY (fctype)
+    PRIMARY KEY (fctype),
+    CHECK (reduction < 0.7)
 );
+
 
 CREATE TABLE Airplane(
     registrationNumber INT NOT NULL,
@@ -23,8 +25,10 @@ CREATE TABLE USER (
     ulastName VARCHAR(20) NOT NULL,
     ubirthDate DATE NOT NULL ,
     passwordHash VARCHAR(20) NOT NULL,
-    PRIMARY KEY (uemail)
+    PRIMARY KEY (uemail),
+    CHECK (DATEDIFF(CURRENT_DATE, ubirthDate) >= 6570) -- Assuming 365.25 days in a year on average
 );
+
 
 CREATE TABLE Reservation (
     rid VARCHAR(20) NOT NULL,
@@ -32,9 +36,11 @@ CREATE TABLE Reservation (
     dateConfirmation DATETIME NOT NULL,
     email VARCHAR(20) NOT NULL,
     PRIMARY KEY (rid),
-    FOREIGN KEY (email) REFERENCES USER(uemail)
-    
+    FOREIGN KEY (email) REFERENCES USER(uemail),
+    CHECK (dateReservation < dateConfirmation),
+    CHECK (DATEDIFF(dateConfirmation, dateReservation) <= 4)
 );
+
 
 
 
