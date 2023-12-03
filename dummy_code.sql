@@ -21,9 +21,10 @@ BEGIN
         ON Reservation.uemail = User.uemail
         WHERE User.uemail = ', QUOTE(user_email));
 
-    PREPARE stmt FROM sql_query;
+    PREPARE stmt FROM @sql_query;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
+
     SET @grant_query = CONCAT('GRANT INSERT, UPDATE, DELETE ON project2.', @view_name, ' TO `user`');
     PREPARE stmt FROM @grant_query;
     EXECUTE stmt;
@@ -50,6 +51,7 @@ BEGIN
 	PREPARE stmt FROM @sql_query;
 	EXECUTE stmt;
 	DEALLOCATE PREPARE stmt;
+
 	SET @grant_query = CONCAT('GRANT INSERT, UPDATE, DELETE ON project2.', @view_name, ' TO `user`');
    	PREPARE stmt FROM @grant_query;
    	EXECUTE stmt;
