@@ -17,7 +17,7 @@ Query OK, 1 row affected (0.16 sec)
 mysql> USE Project2;
 Database changed
 mysql> CREATE TABLE FidelityCard(
-    -> fctype VARCHAR(20) NOT NULL,
+    -> fctype VARCHAR(64) NOT NULL,
     -> reduction INT NOT NULL,
     -> PRIMARY KEY (fctype),
     -> CONSTRAINT check_reduction CHECK (reduction < 70)
@@ -29,33 +29,33 @@ mysql> CREATE TABLE AirplaneModel(
     ->     premiumEconomySeats INT,
     ->     businessClassSeats INT,
     ->     maxweight INT,
-    ->     model VARCHAR(20),
+    ->     model VARCHAR(64),
     ->     PRIMARY KEY (model)
     -> );
 Query OK, 0 rows affected (0.65 sec)
 
 mysql> CREATE TABLE Airplane(
     ->     registrationNumber INT not null auto_increment,
-    ->     airline VARCHAR(20) NOT NULL,
-    ->     model VARCHAR(20) NOT NULL,
+    ->     airline VARCHAR(64) NOT NULL,
+    ->     model VARCHAR(64) NOT NULL,
     ->     PRIMARY KEY (registrationNumber),
     ->     FOREIGN KEY (model) REFERENCES AirplaneModel(model) ON DELETE no action
     -> );
 Query OK, 0 rows affected (0.55 sec)
 mysql> CREATE TABLE User_ (
-    ->     uemail VARCHAR(20) NOT NULL,
-    ->     ufirstName VARCHAR(20) NOT NULL,
-    ->     ulastName VARCHAR(20) NOT NULL,
+    ->     uemail VARCHAR(64) NOT NULL,
+    ->     ufirstName VARCHAR(64) NOT NULL,
+    ->     ulastName VARCHAR(64) NOT NULL,
     ->     ubirthDate DATE NOT NULL ,
     ->     passwordHash VARCHAR(64) NOT NULL,
     ->     PRIMARY KEY (uemail)
     -> );
 Query OK, 0 rows affected (0.35 sec)
 mysql> CREATE TABLE Reservation (
-    ->     rid VARCHAR(20) NOT NULL,
+    ->     rid VARCHAR(64) NOT NULL,
     ->     dateReservation DATETIME NOT NULL,
     ->     dateConfirmation DATETIME NOT NULL,
-    ->     email VARCHAR(20) NOT NULL,
+    ->     email VARCHAR(64) NOT NULL,
     ->     PRIMARY KEY (rid),
     ->     FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE no action,
     ->     CHECK (dateReservation < dateConfirmation),
@@ -63,27 +63,27 @@ mysql> CREATE TABLE Reservation (
     -> );
 Query OK, 0 rows affected (0.26 sec)
 mysql> CREATE TABLE Flight(
-    ->     fid VARCHAR(20) NOT NULL,
+    ->     fid VARCHAR(64) NOT NULL,
     ->     arrivalTime DATETIME NOT NULL,
     ->     departureTime DATETIME NOT NULL,
-    ->     destination VARCHAR(20) NOT NULL,
-    ->     departure VARCHAR(20) NOT NULL,
+    ->     destination VARCHAR(64) NOT NULL,
+    ->     departure VARCHAR(64) NOT NULL,
     ->     registrationNumber INT default 0,
     ->     PRIMARY KEY (fid),
     ->     FOREIGN KEY (registrationNumber) REFERENCES Airplane(registrationNumber) ON DELETE set null
     -> );
 Query OK, 0 rows affected (0.25 sec)
 mysql> CREATE TABLE Checks(
-    ->     email VARCHAR(20) NOT NULL,
-    ->     fid VARCHAR(20) NOT NULL,
+    ->     email VARCHAR(64) NOT NULL,
+    ->     fid VARCHAR(64) NOT NULL,
     ->     PRIMARY KEY (email, fid),
     ->     FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE cascade,
     ->     FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
     -> );
 Query OK, 0 rows affected (0.94 sec)
 mysql> CREATE TABLE Checks(
-    ->     email VARCHAR(20) NOT NULL,
-    ->     fid VARCHAR(20) NOT NULL,
+    ->     email VARCHAR(64) NOT NULL,
+    ->     fid VARCHAR(64) NOT NULL,
     ->     PRIMARY KEY (email, fid),
     ->     FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE cascade,
     ->     FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
@@ -91,35 +91,35 @@ mysql> CREATE TABLE Checks(
 Query OK, 0 rows affected (0.94 sec)
 
 mysql> CREATE TABLE PassengerCard(
-    ->     fctype VARCHAR(20) NOT NULL,
-    ->     fcid VARCHAR(20) NOT NULL,
+    ->     fctype VARCHAR(64) NOT NULL,
+    ->     fcid VARCHAR(64) NOT NULL,
     ->     PRIMARY KEY (fcid),
     ->     FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete cascade
     -> );
 Query OK, 0 rows affected (0.24 sec)
 
 mysql> CREATE TABLE PassengerInfos(
-    ->     cin VARCHAR(20) NOT NULL,
+    ->     cin VARCHAR(64) NOT NULL,
     ->     pbirthDate DATE NOT NULL,
-    ->     passportID VARCHAR(20) NOT NULL,
-    ->     phoneNumber VARCHAR(20),
-    ->     pfirstName VARCHAR(20) NOT NULL,
-    ->     plastName VARCHAR(20) NOT NULL,
-    ->     fcid VARCHAR(20),
+    ->     passportID VARCHAR(64) NOT NULL,
+    ->     phoneNumber VARCHAR(64),
+    ->     pfirstName VARCHAR(64) NOT NULL,
+    ->     plastName VARCHAR(64) NOT NULL,
+    ->     fcid VARCHAR(64),
     ->     PRIMARY KEY (passportID),
     ->     FOREIGN KEY (fcid) REFERENCES PassengerCard(fcid) on delete set null
     -> );
 Query OK, 0 rows affected (0.16 sec)
 
 mysql> CREATE TABLE Ticket(
-    ->     ticketID VARCHAR(20) NOT NULL,
+    ->     ticketID VARCHAR(64) NOT NULL,
     ->     seatNumber INT UNIQUE,
     ->     price FLOAT NOT NULL,
-    ->     passportID VARCHAR(20) NOT NULL,
-    ->     rid VARCHAR(20) NOT NULL,
-    ->     fid VARCHAR(20) NOT NULL,
-    ->     fctype VARCHAR(20) ,
-    ->     class VARCHAR(20) NOT NULL,
+    ->     passportID VARCHAR(64) NOT NULL,
+    ->     rid VARCHAR(64) NOT NULL,
+    ->     fid VARCHAR(64) NOT NULL,
+    ->     fctype VARCHAR(64) ,
+    ->     class VARCHAR(64) NOT NULL,
     ->     PRIMARY KEY (ticketID),
     ->     FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete set null,
     ->     FOREIGN KEY (passportID) REFERENCES PassengerInfos(passportID) on delete cascade,
