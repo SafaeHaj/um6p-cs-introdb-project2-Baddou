@@ -93,7 +93,9 @@ CREATE TABLE Ticket(
     passportID VARCHAR(20) NOT NULL,
     rid VARCHAR(20) NOT NULL,
     fid VARCHAR(20) NOT NULL,
+    fctype VARCHAR(20) NOT NULL,
     PRIMARY KEY (ticketID),
+    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype),
     FOREIGN KEY (passportID) REFERENCES PassengerInfos(passportID),
     FOREIGN KEY (rid) REFERENCES Reservation(rid),
     FOREIGN KEY (fid) REFERENCES Flight(fid)
@@ -109,13 +111,6 @@ CREATE TABLE ClassInfo(
 );
 
 
-
-CREATE TABLE Apply_(
-    fctype VARCHAR(20) NOT NULL,
-    ticketID VARCHAR(20) NOT NULL,
-    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype),
-    FOREIGN KEY (ticketID) REFERENCES Ticket(ticketID)
-);
 
 CREATE TABLE AirplaneModel(
     economySeats INT,
@@ -184,5 +179,5 @@ END;
 //
 
 
---ba9in mabdlnach des attributs o on delete ra khdama 3liha mounia
+
     
