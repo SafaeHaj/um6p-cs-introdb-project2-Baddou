@@ -1,33 +1,33 @@
-drop database project2;
+DROP DATABASE IF EXISTS Project2;
 CREATE DATABASE Project2;
-use project2;
+USE Project2;
 
 
 CREATE TABLE FidelityCard(
     fctype VARCHAR(20) NOT NULL,
     reduction INT NOT NULL,
     PRIMARY KEY (fctype),
-    CHECK (reduction < 0.7)
+    CONSTRAINT check_reduction CHECK (reduction < 70)
 );
 
 
 CREATE TABLE Airplane(
-    registrationNumber INT NOT NULL,
+    registrationNumber INT not null auto_increment,
     airline VARCHAR(20) NOT NULL,
     model VARCHAR(20) NOT NULL,
     PRIMARY KEY (registrationNumber)
 );
 
 
-CREATE TABLE USER (
+CREATE TABLE User_ (
     uemail VARCHAR(20) NOT NULL,
     ufirstName VARCHAR(20) NOT NULL,
     ulastName VARCHAR(20) NOT NULL,
     ubirthDate DATE NOT NULL ,
-    passwordHash VARCHAR(20) NOT NULL,
-    PRIMARY KEY (uemail),
-    CHECK (DATEDIFF(CURRENT_DATE, ubirthDate) >= 6570) -- Assuming 365.25 days in a year on average
+    passwordHash VARCHAR(64) NOT NULL,
+    PRIMARY KEY (uemail)
 );
+
 
 
 CREATE TABLE Reservation (
@@ -36,9 +36,9 @@ CREATE TABLE Reservation (
     dateConfirmation DATETIME NOT NULL,
     email VARCHAR(20) NOT NULL,
     PRIMARY KEY (rid),
-    FOREIGN KEY (email) REFERENCES USER(uemail),
+    FOREIGN KEY (email) REFERENCES User_(uemail),
     CHECK (dateReservation < dateConfirmation),
-    CHECK (DATEDIFF(dateConfirmation, dateReservation) <= 4)
+    CHECK (DATEDIFF(dateConfirmation, dateReservation) <= 1)
 );
 
 
@@ -58,9 +58,9 @@ CREATE TABLE Flight(
 
 CREATE TABLE Checks(
     email VARCHAR(20) NOT NULL,
-   fid VARCHAR(20) NOT NULL,
+    fid VARCHAR(20) NOT NULL,
     PRIMARY KEY (email, fid),
-    FOREIGN KEY (email) REFERENCES USER(uemail),
+    FOREIGN KEY (email) REFERENCES User_(uemail),
     FOREIGN KEY (fid) REFERENCES Flight(fid)
 );
 
@@ -118,7 +118,9 @@ CREATE TABLE Apply_(
 );
 
 CREATE TABLE AirplaneModel(
-    seats INT,
+    economySeats INT,
+    premiumEconomySeats INT,
+    businessClassSeats INT,
     maxweight INT,
     model VARCHAR(20),
     PRIMARY KEY (model)
@@ -137,7 +139,7 @@ CREATE INDEX dep_dest
 ON Flight(departure, destination, departureTime);
 
 
-
+DELIMITER //
 CREATE TRIGGER checkValidReservation
 BEFORE INSERT ON Reservation
 FOR EACH ROW
@@ -155,3 +157,32 @@ BEGIN
         SET MESSAGE_TEXT = 'Reservation refused. No accompanying adult is registered.';
     END IF;
 END;
+//
+
+//
+CREATE TRIGGER user_age_check
+BEFORE INSERT ON User_
+FOR EACH ROW
+BEGIN
+    IF DATEDIFF(NOW(), NEW.ubirthDate) < 6570 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Users must be 18 years or older.';
+    END IF;
+END;
+//
+
+//
+CREATE TRIGGER reservations_date_check
+BEFORE INSERT ON Reservation
+FOR EACH ROW
+BEGIN
+    IF DATEDIFF(NOW(), NEW.dateConfirmation) >= 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'date of reservation are not valid';
+    END IF;
+END;
+//
+
+
+--ba9in mabdlnach des attributs o on delete ra khdama 3liha mounia
+    
