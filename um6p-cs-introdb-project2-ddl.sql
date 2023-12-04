@@ -50,7 +50,7 @@ CREATE TABLE Ticket(
     rid VARCHAR(20) NOT NULL,
     fid VARCHAR(20) NOT NULL,
     fctype VARCHAR(20) NOT NULL,
-    PRIMARY KEY (ticketID),
+    PRIMARY KEY (tid),
     FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype),
     FOREIGN KEY (passportID) REFERENCES Passenger(passportID),
     FOREIGN KEY (rid) REFERENCES Reservation(rid),
