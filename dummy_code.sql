@@ -95,7 +95,7 @@ BEGIN
             SET MESSAGE_TEXT = 'The user you entered does not exist';
 	END IF;
 
-	SET @view_name = CONCAT(SUBSTRING_INDEX(user_email, @, 1), 'PassengerView');
+	SET @view_name = CONCAT(SUBSTRING_INDEX(user_email, '@', 1), 'PassengerView');
 	SET @create_user_view = CONCAT('CREATE VIEW', @view_name, 'AS 
 		CREATE VIEW PassengerView AS
 		SELECT passportID, cin, pfirstName AS firstName, plastName AS lastName, phoneNumber, pbirthDate AS birthDate
