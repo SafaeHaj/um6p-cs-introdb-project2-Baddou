@@ -5,21 +5,22 @@ USE Project2;
 
 CREATE TABLE FidelityCard(
     fctype VARCHAR(20) ,
-    reduction INT  CHECK (value_column BETWEEN 0 AND 100),
+    reduction INT  CHECK (reduction BETWEEN 0 AND 100),
     PRIMARY KEY (fctype)
-
 );
+
 CREATE TABLE AirplaneModel(
+    model VARCHAR(20),
     economySeats INT,
     premiumEconomySeats INT,
     businessClassSeats INT,
+    firstClassSeats INT,
     maxweight INT,
-    model VARCHAR(20),
     PRIMARY KEY (model)
 );
 
 CREATE TABLE Airplane(
-    registrationNumber INT not null auto_increment,
+    registrationNumber INT AUTO_INCREMENT,
     airline VARCHAR(20) NOT NULL,
     model VARCHAR(20) NOT NULL,
     PRIMARY KEY (registrationNumber),
@@ -36,8 +37,6 @@ CREATE TABLE User_ (
     PRIMARY KEY (uemail)
 );
 
-
-
 CREATE TABLE Reservation (
     rid VARCHAR(20) NOT NULL,
     dateReservation DATETIME NOT NULL,
@@ -48,9 +47,6 @@ CREATE TABLE Reservation (
     CHECK (dateReservation < dateConfirmation),
     CHECK (DATEDIFF(dateConfirmation, dateReservation) <= 1)
 );
-
-
-
 
 CREATE TABLE Flight(
     fid VARCHAR(20) NOT NULL,
@@ -64,7 +60,6 @@ CREATE TABLE Flight(
     ON UPDATE CASCADE
 );
 
-
 CREATE TABLE Checks(
     email VARCHAR(20) NOT NULL,
     fid VARCHAR(20) NOT NULL,
@@ -74,20 +69,10 @@ CREATE TABLE Checks(
     FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
 );
 
-
-
-CREATE TABLE PassengerCard(
-    fctype VARCHAR(20) NOT NULL,
-    fcid VARCHAR(20) NOT NULL,
-    PRIMARY KEY (fcid),
-    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete cascade
-);
-
-
-CREATE TABLE PassengerInfos(
-    cin VARCHAR(20) NOT NULL,
+CREATE TABLE Passenger(
+    passportID VARCHAR(20),
+    cin VARCHAR(20),
     pbirthDate DATE NOT NULL,
-    passportID VARCHAR(20) NOT NULL,
     phoneNumber VARCHAR(20),
     pfirstName VARCHAR(20) NOT NULL,
     plastName VARCHAR(20) NOT NULL,
@@ -96,8 +81,15 @@ CREATE TABLE PassengerInfos(
     FOREIGN KEY (fcid) REFERENCES PassengerCard(fcid) on delete set null
 );
 
+CREATE TABLE PassengerCard(
+    fcid VARCHAR(20),
+    fctype VARCHAR(20),
+    PRIMARY KEY (fcid),
+    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete cascade
+);
+
 CREATE TABLE Ticket(
-    ticketID VARCHAR(20) NOT NULL,
+    tid VARCHAR(20) NOT NULL,
     seatNumber INT UNIQUE,
     price FLOAT NOT NULL,
     passportID VARCHAR(20) NOT NULL,
@@ -105,13 +97,12 @@ CREATE TABLE Ticket(
     fid VARCHAR(20) NOT NULL,
     fctype VARCHAR(20) ,
     class VARCHAR(20) NOT NULL,
-    PRIMARY KEY (ticketID),
+    PRIMARY KEY (tid),
     FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete set null,
     FOREIGN KEY (passportID) REFERENCES PassengerInfos(passportID) on delete cascade,
     FOREIGN KEY (rid) REFERENCES Reservation(rid)on delete cascade,
     FOREIGN KEY (fid) REFERENCES Flight(fid) on delete no action
 );
-
 
 CREATE INDEX uchecks
 ON Checks(email);
@@ -125,6 +116,8 @@ ON Reservation(email);
 CREATE INDEX dep_dest
 ON Flight(departure, destination, departureTime);
 
+CREATE INDEX airline_airplane
+ON Airplane(airline);
 
 DELIMITER //
 CREATE TRIGGER checkValidReservation
