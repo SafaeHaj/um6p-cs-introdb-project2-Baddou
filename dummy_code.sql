@@ -56,9 +56,7 @@ BEGIN
         EXECUTE stmt;
         DEALLOCATE PREPARE stmt;
     END IF;
-END;
-//
-DELIMITER ;
+END;//
 
 DELIMITER //
 CREATE PROCEDURE CreateReservationView(IN user_email VARCHAR(32))
@@ -81,9 +79,7 @@ BEGIN
     PREPARE stmt FROM @create_user_view;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-END //
-DELIMITER ;
-
+END; //
 
 DELIMITER //
 CREATE PROCEDURE CreatePassengerView(IN user_email VARCHAR(32))
@@ -108,5 +104,4 @@ BEGIN
    	PREPARE stmt FROM @create_user_view;
    	EXECUTE stmt;
     	DEALLOCATE PREPARE stmt;
-END //
-DELIMITER;
+END; //
