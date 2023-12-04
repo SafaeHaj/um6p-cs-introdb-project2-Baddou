@@ -18,16 +18,51 @@ CREATE TABLE Passenger(
     phoneNumber VARCHAR(20),
     pfirstName VARCHAR(20) NOT NULL,
     plastName VARCHAR(20) NOT NULL,
-    fcid VARCHAR(20),
+    fcid VARCHAR(20) UNIQUE,
     PRIMARY KEY (passportID)
 );
 
-CREATE TABLE PassengerCard(
+CREATE TABLE FidelityCard(
     fctype VARCHAR(20) NOT NULL,
-    fcid VARCHAR(20) NOT NULL,
+    reduction INT NOT NULL,
+    PRIMARY KEY (fctype),
+    CONSTRAINT check_reduction CHECK (reduction < 70)
+);
+
+CREATE TABLE PassengerCard(
+	fcid VARCHAR(20) NOT NULL,
+    fctype VARCHAR(20) NOT NULL,
     PRIMARY KEY (fcid),
     FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype),
     FOREIGN KEY (fcid) REFERENCES Passenger(fcid)
+);
+
+CREATE TABLE AirplaneModel(
+    model VARCHAR(20),
+    economySeats INT,
+    premiumEconomySeats INT,
+    businessClassSeats INT,
+    firstClassSeats INT,
+    maxWeight INT,
+    PRIMARY KEY (model)
+);
+
+CREATE TABLE Airplane(
+    registrationNumber INT not null auto_increment,
+    airline VARCHAR(20) NOT NULL,
+    model VARCHAR(20) NOT NULL,
+    PRIMARY KEY (registrationNumber)
+);
+
+CREATE TABLE Flight(
+    fid VARCHAR(20) NOT NULL,
+    arrivalTime DATETIME NOT NULL,
+    departureTime DATETIME NOT NULL,
+    destination VARCHAR(20) NOT NULL,
+    departure VARCHAR(20) NOT NULL,
+    registrationNumber INT NOT NULL,
+    PRIMARY KEY (fid),
+    FOREIGN KEY (registrationNumber) REFERENCES Airplane(registrationNumber)
 );
 
 CREATE TABLE Reservation (
@@ -54,41 +89,6 @@ CREATE TABLE Ticket(
     FOREIGN KEY (passportID) REFERENCES Passenger(passportID),
     FOREIGN KEY (rid) REFERENCES Reservation(rid),
     FOREIGN KEY (fid) REFERENCES Flight(fid)
-);
-
-CREATE TABLE FidelityCard(
-    fctype VARCHAR(20) NOT NULL,
-    reduction INT NOT NULL,
-    PRIMARY KEY (fctype),
-    CONSTRAINT check_reduction CHECK (reduction < 70)
-);
-
-CREATE TABLE Flight(
-    fid VARCHAR(20) NOT NULL,
-    arrivalTime DATETIME NOT NULL,
-    departureTime DATETIME NOT NULL,
-    destination VARCHAR(20) NOT NULL,
-    departure VARCHAR(20) NOT NULL,
-    registrationNumber INT NOT NULL,
-    PRIMARY KEY (fid),
-    FOREIGN KEY (registrationNumber) REFERENCES Airplane(registrationNumber)
-);
-
-CREATE TABLE AirplaneModel(
-    model VARCHAR(20),
-    economySeats INT,
-    premiumEconomySeats INT,
-    businessClassSeats INT,
-    firstClassSeats INT,
-    maxWeight INT,
-    PRIMARY KEY (model)
-);
-
-CREATE TABLE Airplane(
-    registrationNumber INT not null auto_increment,
-    airline VARCHAR(20) NOT NULL,
-    model VARCHAR(20) NOT NULL,
-    PRIMARY KEY (registrationNumber)
 );
 
 CREATE TABLE Checks(
