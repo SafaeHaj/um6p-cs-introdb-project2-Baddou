@@ -4,9 +4,9 @@ USE Project2;
 
 
 CREATE TABLE User_ (
-    uemail VARCHAR(20) NOT NULL,
-    ufirstName VARCHAR(20) NOT NULL,
-    ulastName VARCHAR(20) NOT NULL,
+    uemail VARCHAR(32) NOT NULL,
+    ufirstName VARCHAR(32) NOT NULL,
+    ulastName VARCHAR(32) NOT NULL,
     ubirthDate DATE NOT NULL ,
     passwordHash VARCHAR(64) NOT NULL,
     PRIMARY KEY (uemail)
@@ -24,7 +24,7 @@ CREATE TABLE AirplaneModel(
 
 CREATE TABLE Airplane(
     registrationNumber INT AUTO_INCREMENT,
-    airline VARCHAR(20) NOT NULL,
+    airline VARCHAR(64) NOT NULL,
     model VARCHAR(20) NOT NULL,
     PRIMARY KEY (registrationNumber),
     FOREIGN KEY (model) REFERENCES AirplaneModel(model) ON DELETE no action
@@ -35,7 +35,7 @@ CREATE TABLE Reservation (
     rid VARCHAR(20) NOT NULL,
     dateReservation DATETIME NOT NULL,
     dateConfirmation DATETIME ,
-    email VARCHAR(20) NOT NULL,
+    email VARCHAR(32) NOT NULL,
     PRIMARY KEY (rid),
     FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE no action,
     CHECK (dateReservation < dateConfirmation),
@@ -61,7 +61,7 @@ CREATE TABLE FidelityCard(
 );
 
 CREATE TABLE PassengerCard(
-    fcid VARCHAR(20),
+    fcid VARCHAR(64),
     fctype VARCHAR(20),
     PRIMARY KEY (fcid),
     FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete cascade
@@ -72,9 +72,9 @@ CREATE TABLE Passenger(
     cin VARCHAR(20),
     pbirthDate DATE NOT NULL,
     phoneNumber VARCHAR(20),
-    pfirstName VARCHAR(20) NOT NULL,
-    plastName VARCHAR(20) NOT NULL,
-    fcid VARCHAR(20),
+    pfirstName VARCHAR(32) NOT NULL,
+    plastName VARCHAR(32) NOT NULL,
+    fcid VARCHAR(64),
     PRIMARY KEY (passportID),
     FOREIGN KEY (fcid) REFERENCES PassengerCard(fcid) on delete set null
 );
@@ -96,7 +96,7 @@ CREATE TABLE Ticket(
 );
 
 CREATE TABLE Checks(
-    email VARCHAR(20) NOT NULL,
+    email VARCHAR(32) NOT NULL,
     fid VARCHAR(20) NOT NULL,
     PRIMARY KEY (email, fid),
     FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE cascade ,
