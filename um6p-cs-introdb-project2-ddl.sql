@@ -19,8 +19,7 @@ CREATE TABLE Passenger(
     pfirstName VARCHAR(20) NOT NULL,
     plastName VARCHAR(20) NOT NULL,
     fcid VARCHAR(20),
-    PRIMARY KEY (passportID),
-    FOREIGN KEY (fcid) REFERENCES PassengerCard(fcid)
+    PRIMARY KEY (passportID)
 );
 
 CREATE TABLE PassengerCard(
