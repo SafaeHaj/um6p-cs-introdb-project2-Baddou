@@ -1,5 +1,3 @@
-CREATE ROLE 'user', 'airline', 'admin';
-
 GRANT SELECT ON project2.Checks TO 'admin';
 GRANT ALL ON project2.Reservation TO 'admin';
 GRANT SELECT ON project2.Flight TO 'user';
@@ -18,7 +16,7 @@ DELIMITER //
 CREATE TRIGGER trig_on_user_add AFTER INSERT ON User_
 FOR EACH ROW
 BEGIN 
-    CALL on_user_add(NEW.uemail, NEW.passwordHash);
+    CALL on_user_add(NEW.uemail);
 END;
 //
 
@@ -91,7 +89,7 @@ END;
 // 
 
 DELIMITER //
-CREATE FUNCTION acronymize(name VARCHAR(64)) RETURNS VARCHAR(32)
+CREATE FUNCTION acronymize(name VARCHAR(64)) RETURNS VARCHAR(32) DETERMINISTIC
 BEGIN
     DECLARE acronomized VARCHAR(32) DEFAULT '';
     DECLARE i INT DEFAULT 1;
@@ -104,19 +102,24 @@ BEGIN
     END WHILE;
 
     RETURN acronomized;
-END; //
+END;//
 	
 DELIMITER //
+
 CREATE PROCEDURE CreateAirline(IN airline VARCHAR(64)) -- to call in loop in order to generate airline accounts
 BEGIN
    DECLARE airline_acronym VARCHAR(32);
    SET airline_acronym = acronomize(airline);
-   IF NOT EXISTS (SELECT 1 FROM mysql.user WHERE user = airline_acronym) 
+   
+   IF NOT EXISTS (SELECT 1 FROM mysql.user WHERE user = airline_acronym) THEN
         CREATE USER airline_acronym;
         GRANT 'airline' TO airline_acronym;
    END IF;
 END; 
-// 
+
+//
+
+DELIMITER ;
 
 DELIMITER //
 CREATE PROCEDURE CreateAirplaneView(IN airline VARCHAR(64))
@@ -162,6 +165,8 @@ BEGIN
    	PREPARE stmt FROM @create_view;
    	EXECUTE stmt;
     	DEALLOCATE PREPARE stmt;
+END; 
+//
 END; 
 //
 
