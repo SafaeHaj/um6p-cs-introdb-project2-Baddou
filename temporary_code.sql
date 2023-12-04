@@ -3,10 +3,13 @@ CREATE DATABASE Project2;
 USE Project2;
 
 
-CREATE TABLE FidelityCard(
-    fctype VARCHAR(20) ,
-    reduction INT  CHECK (reduction BETWEEN 0 AND 100),
-    PRIMARY KEY (fctype)
+CREATE TABLE User_ (
+    uemail VARCHAR(20) NOT NULL,
+    ufirstName VARCHAR(20) NOT NULL,
+    ulastName VARCHAR(20) NOT NULL,
+    ubirthDate DATE NOT NULL ,
+    passwordHash VARCHAR(64) NOT NULL,
+    PRIMARY KEY (uemail)
 );
 
 CREATE TABLE AirplaneModel(
@@ -26,15 +29,6 @@ CREATE TABLE Airplane(
     PRIMARY KEY (registrationNumber),
     FOREIGN KEY (model) REFERENCES AirplaneModel(model) ON DELETE no action
     ON UPDATE CASCADE
-);
-
-CREATE TABLE User_ (
-    uemail VARCHAR(20) NOT NULL,
-    ufirstName VARCHAR(20) NOT NULL,
-    ulastName VARCHAR(20) NOT NULL,
-    ubirthDate DATE NOT NULL ,
-    passwordHash VARCHAR(64) NOT NULL,
-    PRIMARY KEY (uemail)
 );
 
 CREATE TABLE Reservation (
@@ -60,13 +54,17 @@ CREATE TABLE Flight(
     ON UPDATE CASCADE
 );
 
-CREATE TABLE Checks(
-    email VARCHAR(20) NOT NULL,
-    fid VARCHAR(20) NOT NULL,
-    PRIMARY KEY (email, fid),
-    FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE cascade ,
-    
-    FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
+CREATE TABLE FidelityCard(
+    fctype VARCHAR(20) ,
+    reduction INT  CHECK (reduction BETWEEN 0 AND 100),
+    PRIMARY KEY (fctype)
+);
+
+CREATE TABLE PassengerCard(
+    fcid VARCHAR(20),
+    fctype VARCHAR(20),
+    PRIMARY KEY (fcid),
+    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete cascade
 );
 
 CREATE TABLE Passenger(
@@ -79,13 +77,6 @@ CREATE TABLE Passenger(
     fcid VARCHAR(20),
     PRIMARY KEY (passportID),
     FOREIGN KEY (fcid) REFERENCES PassengerCard(fcid) on delete set null
-);
-
-CREATE TABLE PassengerCard(
-    fcid VARCHAR(20),
-    fctype VARCHAR(20),
-    PRIMARY KEY (fcid),
-    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete cascade
 );
 
 CREATE TABLE Ticket(
@@ -102,6 +93,15 @@ CREATE TABLE Ticket(
     FOREIGN KEY (passportID) REFERENCES PassengerInfos(passportID) on delete cascade,
     FOREIGN KEY (rid) REFERENCES Reservation(rid)on delete cascade,
     FOREIGN KEY (fid) REFERENCES Flight(fid) on delete no action
+);
+
+CREATE TABLE Checks(
+    email VARCHAR(20) NOT NULL,
+    fid VARCHAR(20) NOT NULL,
+    PRIMARY KEY (email, fid),
+    FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE cascade ,
+    
+    FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
 );
 
 CREATE INDEX uchecks
