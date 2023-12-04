@@ -24,39 +24,42 @@ END;
 */
 
 DELIMITER //
-CREATE TRIGGER on_user_add AFTER INSERT ON User
-FOR EACH ROW
+CREATE PROCEDURE on_user_add(IN user_email VARCHAR(32))
 BEGIN
-    DECLARE user_name VARCHAR(32);
-    DECLARE create_user VARCHAR(186);
-
-    SET user_name = SUBSTRING_INDEX(NEW.uemail, '@', 1);
-
-    IF NOT EXISTS (SELECT 1 FROM mysql.user WHERE user = user_name) THEN
-        SET create_user = CONCAT("CREATE USER ", user_name, "; GRANT 'user' TO ", user_name, ';');
-        PREPARE stmt FROM @create_user;
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
+	DECLARE user_name VARCHAR(32);
+    IF NOT EXISTS (SELECT 1 FROM project2.User_ WHERE user.uemail = user_email) THEN
+    SET user_name = SUBSTRING_INDEX(user_email, '@', 1);
+	CREATE USER user_name;
+	GRANT 'user' TO user_name;
     END IF;
 END;
 //
 
-DELIMITER//
-CREATE TRIGGER on_user_delete BEFORE DELETE ON User
+DELIMITER //
+CREATE TRIGGER trig_on_user_add AFTER INSERT ON User_
 FOR EACH ROW
-BEGIN
-    DECLARE user_name VARCHAR(32);
-    DECLARE delete_user VARCHAR(200);
-    
-    SET user_name = SUBSTRING_INDEX(OLD.uemail, '@', 1);
+BEGIN 
+    CALL on_user_add(NEW.uemail);
+END;
+//
 
-    IF EXISTS (SELECT 1 FROM mysql.user WHERE user = user_name) THEN
-        SET delete_user = CONCAT("REVOKE 'user' FROM ", user_name, ";DROP ", user_name, ';');
-	PREPARE stmt FROM @delete_user;
-        EXECUTE stmt;
-        DEALLOCATE PREPARE stmt;
+DELIMITER //
+CREATE PROCEDURE on_user_delete(IN user_email VARCHAR(32))
+BEGIN
+	DECLARE user_name VARCHAR(32);
+    IF EXISTS (SELECT 1 FROM project2.User_ WHERE user = user_name) THEN
+		SET user_name = SUBSTRING_INDEX(user_email, '@', 1);
+		REVOKE 'user' FROM user_name;
+		DROP USER user_name;
     END IF;
 END;//
+
+CREATE TRIGGER trig_on_user_delete BEFORE DELETE ON User_
+FOR EACH ROW 
+BEGIN
+    CALL on_user_delete(OLD.uemail);
+END;
+
 
 DELIMITER //
 CREATE PROCEDURE CreateReservationView(IN user_email VARCHAR(32))
@@ -79,7 +82,9 @@ BEGIN
     PREPARE stmt FROM @create_user_view;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-END; //
+END //
+DELIMITER ;
+
 
 DELIMITER //
 CREATE PROCEDURE CreatePassengerView(IN user_email VARCHAR(32))
@@ -90,7 +95,7 @@ BEGIN
 	    SIGNAL SQLSTATE '45000'
             SET MESSAGE_TEXT = 'The user you entered does not exist';
 	END IF;
-
+	
 	SET @view_name = CONCAT(SUBSTRING_INDEX(user_email, '@', 1), 'PassengerView');
 	SET @create_user_view = CONCAT('CREATE VIEW', @view_name, 'AS 
 		CREATE VIEW PassengerView AS
@@ -104,4 +109,5 @@ BEGIN
    	PREPARE stmt FROM @create_user_view;
    	EXECUTE stmt;
     	DEALLOCATE PREPARE stmt;
-END; //
+END; 
+// 
