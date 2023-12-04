@@ -118,8 +118,7 @@ ON Airplane(airline);
 
 -- EXPLANATORY COMMENT
 DELIMITER //
-CREATE TRIGGER checkValidReservation
-BEFORE INSERT ON Reservation
+CREATE TRIGGER checkValidReservation BEFORE INSERT ON Reservation
 FOR EACH ROW
 BEGIN
     DECLARE adult_count INT;
