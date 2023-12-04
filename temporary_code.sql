@@ -121,18 +121,17 @@ ON Airplane(airline);
 
 DELIMITER //
 CREATE TRIGGER checkValidReservation
-BEFORE INSERT ON Reservation
+AFTER UPDATE ON Reservation
 FOR EACH ROW
 BEGIN
     DECLARE adult_count INT;
 
-    -- number of accompanying adults 
     SELECT COUNT(*) INTO adult_count
     FROM Ticket
     INNER JOIN Passenger ON Ticket.passportID = Passenger.passportID
-    WHERE Ticket.rid = NEW.rid AND YEAR(CURDATE()) - YEAR(Passenger.pbirthDate) >= 16;
-
-    IF adult_count = 0 THEN
+    WHERE Ticket.rid = OLD.rid AND YEAR(CURDATE()) - YEAR(Passenger.pbirthDate) >= 16;
+	    
+    IF adult_count = 0 AND OLD.dateConfirmation IS NOT NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Reservation refused. No accompanying adult is registered.';
     END IF;
@@ -150,71 +149,3 @@ BEGIN
     END IF;
 END;
 //
-
-//
-CREATE TRIGGER reservation_dates_check
-BEFORE INSERT ON Reservation
-FOR EACH ROW
-BEGIN
-    IF DATEDIFF(NOW(), NEW.dateConfirmation) <= 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'dates of reservation are not valid';
-    END IF;
-END;
-//
-
-CREATE ROLE 'user', 'airline', 'admin';
-
-GRANT ALL ON project2.Flight  TO 'airline';
-GRANT ALL ON project2.Airplane  TO 'airline';
-GRANT SELECT ON project2.Checks TO 'admin';
-GRANT ALL ON project2.Reservation TO 'admin';
-GRANT SELECT ON project2.Flight TO 'user';
-
-DELIMITER //
-CREATE PROCEDURE CreateReservationView(IN user_email VARCHAR(32))
-BEGIN
-    DECLARE view_name VARCHAR(46);
-    DECLARE sql_query VARCHAR(164);
-    DECLARE grant_query VARCHAR(86);
-
-    SET @view_name = CONCAT(SUBSTRING_INDEX(user_email, '@', 1), 'ReservationView');
-    SET @sql_query = CONCAT('CREATE VIEW ', @view_name, ' AS
-        SELECT rid, rdate, confirmDate
-        FROM Reservation
-        JOIN User
-        ON Reservation.uemail = User.uemail
-        WHERE User.uemail = ', QUOTE(user_email));
-
-    PREPARE stmt FROM @sql_query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-    SET @grant_query = CONCAT('GRANT INSERT, UPDATE, DELETE ON project2.', @view_name, ' TO `user`');
-    PREPARE stmt FROM @grant_query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-END //
- 
-DELIMITER //
-CREATE PROCEDURE CreatePassengerView(IN user_email VARCHAR(32))
-BEGIN
-		DECLARE view_name VARCHAR(46);
-        DECLARE sql_query VARCHAR(164);
-        DECLARE grant_query VARCHAR(86);
-	SET @view_name = CONCAT(SUBSTRING_INDEX(user_email, @, 1), 'PassengerView');
-	SET @sql_query = CONCAT('CREATE VIEW', @view_name, 'AS 
-	CREATE VIEW PassengerView AS
-	SELECT passportID, cin, pfirstName AS firstName, plastName AS lastName, phoneNumber, pbirthDate AS birthDate
-	FROM Passenger
-	JOIN Ticket ON Ticket.passportID = Passenger.passportID
-	JOIN Reservation ON Reservation.rid = Ticket.rid
-	JOIN User ON User.uemail = Reservation.uemail
-	WHERE User.uemail = ', QUOTE(user_email), ';');
-	PREPARE stmt FROM @sql_query;
-	EXECUTE stmt;
-	DEALLOCATE PREPARE stmt;
-	SET @grant_query = CONCAT('GRANT INSERT, UPDATE, DELETE ON project2.', @view_name, ' TO `user`');
-   	PREPARE stmt FROM @grant_query;
-   	EXECUTE stmt;
-    	DEALLOCATE PREPARE stmt;
-END //
