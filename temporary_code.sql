@@ -81,7 +81,7 @@ CREATE TABLE Passenger(
 
 CREATE TABLE Ticket(
     tid VARCHAR(20) NOT NULL,
-    seatNumber INT UNIQUE,
+    seatNumber INT,
     price FLOAT NOT NULL,
     passportID VARCHAR(20) NOT NULL,
     rid VARCHAR(20) NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE Ticket(
     class VARCHAR(20) NOT NULL,
     PRIMARY KEY (tid),
     FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete set null,
-    FOREIGN KEY (passportID) REFERENCES PassengerInfos(passportID) on delete cascade,
+    FOREIGN KEY (passportID) REFERENCES Passenger(passportID) on delete cascade,
     FOREIGN KEY (rid) REFERENCES Reservation(rid)on delete cascade,
     FOREIGN KEY (fid) REFERENCES Flight(fid) on delete no action
 );
