@@ -5,11 +5,11 @@ GRANT ALL ON project2.Reservation TO 'admin';
 GRANT SELECT ON project2.Flight TO 'user';
 
 DELIMITER //
-CREATE PROCEDURE on_user_add(IN user_email VARCHAR(32), IN user_password VARCHAR(64))
+CREATE PROCEDURE on_user_add(IN user_email VARCHAR(32))
 BEGIN
     DECLARE user_name VARCHAR(32);
     SET user_name = SUBSTRING_INDEX(user_email, '@', 1);
-    CREATE USER user_name IDENTIFIED BY user_password;
+    CREATE USER user_name;
     GRANT 'user' TO user_name;
 END;
 //
