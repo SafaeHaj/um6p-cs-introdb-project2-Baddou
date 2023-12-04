@@ -2,39 +2,14 @@ DROP DATABASE IF EXISTS Project2;
 CREATE DATABASE Project2;
 USE Project2;
 
+
 CREATE TABLE User_ (
-    uemail VARCHAR(20) NOT NULL,
-    ufirstName VARCHAR(20) NOT NULL,
-    ulastName VARCHAR(20) NOT NULL,
+    uemail VARCHAR(32) NOT NULL,
+    ufirstName VARCHAR(32) NOT NULL,
+    ulastName VARCHAR(32) NOT NULL,
     ubirthDate DATE NOT NULL ,
     passwordHash VARCHAR(64) NOT NULL,
     PRIMARY KEY (uemail)
-);
-
-CREATE TABLE Passenger(
-    cin VARCHAR(20) NOT NULL,
-    pbirthDate DATE NOT NULL,
-    passportID VARCHAR(20) NOT NULL,
-    phoneNumber VARCHAR(20),
-    pfirstName VARCHAR(20) NOT NULL,
-    plastName VARCHAR(20) NOT NULL,
-    fcid VARCHAR(20) UNIQUE,
-    PRIMARY KEY (passportID)
-);
-
-CREATE TABLE FidelityCard(
-    fctype VARCHAR(20) NOT NULL,
-    reduction INT NOT NULL,
-    PRIMARY KEY (fctype),
-    CONSTRAINT check_reduction CHECK (reduction < 70)
-);
-
-CREATE TABLE PassengerCard(
-	fcid VARCHAR(20) NOT NULL,
-    fctype VARCHAR(20) NOT NULL,
-    PRIMARY KEY (fcid),
-    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype),
-    FOREIGN KEY (fcid) REFERENCES Passenger(fcid)
 );
 
 CREATE TABLE AirplaneModel(
@@ -43,15 +18,28 @@ CREATE TABLE AirplaneModel(
     premiumEconomySeats INT,
     businessClassSeats INT,
     firstClassSeats INT,
-    maxWeight INT,
+    maxweight INT,
     PRIMARY KEY (model)
 );
 
 CREATE TABLE Airplane(
-    registrationNumber INT not null auto_increment,
-    airline VARCHAR(20) NOT NULL,
+    registrationNumber INT AUTO_INCREMENT,
+    airline VARCHAR(64) NOT NULL,
     model VARCHAR(20) NOT NULL,
-    PRIMARY KEY (registrationNumber)
+    PRIMARY KEY (registrationNumber),
+    FOREIGN KEY (model) REFERENCES AirplaneModel(model) ON DELETE no action
+    ON UPDATE CASCADE
+);
+
+CREATE TABLE Reservation (
+    rid VARCHAR(20) NOT NULL,
+    dateReservation DATETIME NOT NULL,
+    dateConfirmation DATETIME ,
+    email VARCHAR(32) NOT NULL,
+    PRIMARY KEY (rid),
+    FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE no action,
+    CHECK (dateReservation < dateConfirmation),
+    CHECK (DATEDIFF(dateConfirmation, dateReservation) <= 1)
 );
 
 CREATE TABLE Flight(
@@ -62,44 +50,60 @@ CREATE TABLE Flight(
     departure VARCHAR(20) NOT NULL,
     registrationNumber INT NOT NULL,
     PRIMARY KEY (fid),
-    FOREIGN KEY (registrationNumber) REFERENCES Airplane(registrationNumber)
+    FOREIGN KEY (registrationNumber) REFERENCES Airplane(registrationNumber) ON DELETE CASCADE
+    ON UPDATE CASCADE
 );
 
-CREATE TABLE Reservation (
-    rid VARCHAR(20) NOT NULL,
-    dateReservation DATETIME NOT NULL,
-    dateConfirmation DATETIME NOT NULL,
-    email VARCHAR(20) NOT NULL,
-    PRIMARY KEY (rid),
-    FOREIGN KEY (email) REFERENCES User_(uemail),
-    CHECK (dateReservation < dateConfirmation),
-    CHECK (DATEDIFF(dateConfirmation, dateReservation) <= 1)
+CREATE TABLE FidelityCard(
+    fctype VARCHAR(20) ,
+    reduction INT  CHECK (reduction BETWEEN 0 AND 100),
+    PRIMARY KEY (fctype)
+);
+
+CREATE TABLE PassengerCard(
+    fcid VARCHAR(64),
+    fctype VARCHAR(20),
+    PRIMARY KEY (fcid),
+    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete cascade
+);
+
+CREATE TABLE Passenger(
+    passportID VARCHAR(20),
+    cin VARCHAR(20),
+    pbirthDate DATE NOT NULL,
+    phoneNumber VARCHAR(20),
+    pfirstName VARCHAR(32) NOT NULL,
+    plastName VARCHAR(32) NOT NULL,
+    fcid VARCHAR(64),
+    PRIMARY KEY (passportID),
+    FOREIGN KEY (fcid) REFERENCES PassengerCard(fcid) on delete set null
 );
 
 CREATE TABLE Ticket(
     tid VARCHAR(20) NOT NULL,
-    seatNumber INT UNIQUE,
+    seatNumber INT,
     price FLOAT NOT NULL,
     passportID VARCHAR(20) NOT NULL,
     rid VARCHAR(20) NOT NULL,
     fid VARCHAR(20) NOT NULL,
-    fctype VARCHAR(20) NOT NULL,
+    fctype VARCHAR(20) ,
+    class VARCHAR(20) NOT NULL,
     PRIMARY KEY (tid),
-    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype),
-    FOREIGN KEY (passportID) REFERENCES Passenger(passportID),
-    FOREIGN KEY (rid) REFERENCES Reservation(rid),
-    FOREIGN KEY (fid) REFERENCES Flight(fid)
+    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete set null,
+    FOREIGN KEY (passportID) REFERENCES Passenger(passportID) on delete cascade,
+    FOREIGN KEY (rid) REFERENCES Reservation(rid)on delete cascade,
+    FOREIGN KEY (fid) REFERENCES Flight(fid) on delete no action
 );
 
 CREATE TABLE Checks(
-    email VARCHAR(20) NOT NULL,
+    email VARCHAR(32) NOT NULL,
     fid VARCHAR(20) NOT NULL,
     PRIMARY KEY (email, fid),
-    FOREIGN KEY (email) REFERENCES User_(uemail),
-    FOREIGN KEY (fid) REFERENCES Flight(fid)
+    FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE cascade ,
+    
+    FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
 );
 
--- EXPLANATORY COMMENT
 CREATE INDEX uchecks
 ON Checks(email);
 
@@ -115,9 +119,9 @@ ON Flight(departure, destination, departureTime);
 CREATE INDEX airline_airplane
 ON Airplane(airline);
 
--- EXPLANATORY COMMENT
 DELIMITER //
-CREATE TRIGGER checkValidReservation BEFORE INSERT ON Reservation
+CREATE TRIGGER checkValidReservation
+AFTER UPDATE ON Reservation
 FOR EACH ROW
 BEGIN
     DECLARE adult_count INT;
@@ -125,35 +129,23 @@ BEGIN
     SELECT COUNT(*) INTO adult_count
     FROM Ticket
     INNER JOIN Passenger ON Ticket.passportID = Passenger.passportID
-    WHERE Ticket.rid = NEW.rid AND YEAR(CURDATE()) - YEAR(Passenger.pbirthDate) >= 16;
-
-    IF adult_count = 0 THEN
+    WHERE Ticket.rid = OLD.rid AND YEAR(CURDATE()) - YEAR(Passenger.pbirthDate) >= 16;
+	    
+    IF adult_count = 0 AND OLD.dateConfirmation IS NOT NULL THEN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Reservation refused. No accompanying adult is registered.';
     END IF;
 END;
 //
 
--- EXPLANATORY COMMENT
-DELIMITER //
-CREATE TRIGGER user_age_check BEFORE INSERT ON User_
+//
+CREATE TRIGGER user_age_check
+BEFORE INSERT ON User_
 FOR EACH ROW
 BEGIN
     IF DATEDIFF(NOW(), NEW.ubirthDate) < 6570 THEN
         SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'User must be 18 years or older.';
-    END IF;
-END;
-//
-
--- EXPLANATORY COMMENT
-DELIMITER //
-CREATE TRIGGER reservations_date_check BEFORE INSERT ON Reservation
-FOR EACH ROW
-BEGIN
-    IF DATEDIFF(NOW(), NEW.dateConfirmation) >= 0 THEN
-        SIGNAL SQLSTATE '45000'
-        SET MESSAGE_TEXT = 'Date of reservation is not valid';
+        SET MESSAGE_TEXT = 'Users must be 18 years or older.';
     END IF;
 END;
 //
