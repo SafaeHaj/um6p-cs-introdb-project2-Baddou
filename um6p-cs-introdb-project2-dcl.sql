@@ -52,13 +52,13 @@ BEGIN
     EXECUTE create_passenger_stmt;
     DEALLOCATE PREPARE create_passenger_stmt;
 
-	PREPARE grant_reservation_stmt FROM @grant_user_reservation;
-	EXECUTE grant_reservation_stmt;
-	DEALLOCATE PREPARE grant_reservation_stmt;
+    PREPARE grant_reservation_stmt FROM @grant_user_reservation;
+    EXECUTE grant_reservation_stmt;
+    DEALLOCATE PREPARE grant_reservation_stmt;
 
-	PREPARE grant_passenger_stmt FROM @grant_user_passenger;
-	EXECUTE grant_passenger_stmt;
-	DEALLOCATE PREPARE grant_passenger_stmt;
+    PREPARE grant_passenger_stmt FROM @grant_user_passenger;
+    EXECUTE grant_passenger_stmt;
+    DEALLOCATE PREPARE grant_passenger_stmt;
 END //
 /*
 -------------------------------
@@ -211,7 +211,7 @@ END;
 -----Airline user account revoke------
 --------------------------------------
 DELIMITER //
-CREATE PROCEDURE on_airline_delete(IN airline VARCHAR(64))
+CREATE PROCEDURE on_airline_revoke(IN airline VARCHAR(64))
 BEGIN
     DECLARE acronym_airline VARCHAR(32);
     SET acronym_airline = acronymize(airline);
