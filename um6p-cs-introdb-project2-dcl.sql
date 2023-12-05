@@ -1,6 +1,8 @@
 CREATE ROLE 'user', 'airline', 'admin';
 
+-- the admin is responsible for the database
 GRANT ALL ON project2.* TO 'admin';
+-- users with 'user' role have access to all flights
 GRANT SELECT ON project2.Flight TO 'user';
 
 /*
@@ -8,6 +10,7 @@ GRANT SELECT ON project2.Flight TO 'user';
 -----User account handling----------
 ------------------------------------
 */
+-- create reservation and passenger views for user and grant read write access to them
 DELIMITER //
 CREATE PROCEDURE grant_user_views(IN user_email VARCHAR(32))
 BEGIN
@@ -89,6 +92,7 @@ END;
 -----User account deletion-----
 -------------------------------
 */
+-- delete user and drop the viezs corresponding to that user
 DELIMITER //
 CREATE PROCEDURE on_user_delete(IN user_email VARCHAR(32))
 BEGIN
@@ -143,6 +147,7 @@ END;//
 -----Grant row view access to airline-----------
 ------------------------------------------------
 */
+-- create airplane and airplanemodel views for airline and grant read-write access on them
 DELIMITER //
 CREATE PROCEDURE create_airline_views(IN airline VARCHAR(64))
 BEGIN
@@ -219,11 +224,11 @@ END;
 
 /*
 --------------------------------------
------Airline user account revoke------
+-----Airline user account delete------
 --------------------------------------
 */
 DELIMITER //
-CREATE PROCEDURE on_airline_revoke(IN airline VARCHAR(64))
+CREATE PROCEDURE on_airline_delete(IN airline VARCHAR(64))
 BEGIN
     DECLARE acronym_airline VARCHAR(32);
     SET acronym_airline = acronymize(airline);
