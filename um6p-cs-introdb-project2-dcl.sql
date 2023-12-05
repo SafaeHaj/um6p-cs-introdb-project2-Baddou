@@ -182,10 +182,11 @@ BEGIN
     DEALLOCATE PREPARE grant_airplane_model_stmt;
 END;
 //
-
+/*
 --------------------------------------
 -----Airline user account creation----
 --------------------------------------
+*/
 DELIMITER //
 CREATE PROCEDURE create_airline(IN airline VARCHAR(64), IN airline_password VARCHAR(64))
 BEGIN
