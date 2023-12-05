@@ -1,3 +1,5 @@
+CREATE ROLE 'user', 'airline', 'admin';
+
 GRANT SELECT ON project2.Checks TO 'admin';
 GRANT ALL ON project2.Reservation TO 'admin';
 GRANT SELECT ON project2.Flight TO 'user';
@@ -167,7 +169,4 @@ BEGIN
     	DEALLOCATE PREPARE stmt;
 END; 
 //
-END; 
-//
-
 
