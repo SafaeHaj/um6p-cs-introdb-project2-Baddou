@@ -1,7 +1,6 @@
 CREATE ROLE 'user', 'airline', 'admin';
 
-GRANT SELECT ON project2.Checks TO 'admin';
-GRANT ALL ON project2.Reservation TO 'admin';
+GRANT ALL ON project2.* TO 'admin';
 GRANT SELECT ON project2.Flight TO 'user';
 
 
@@ -153,18 +152,18 @@ BEGIN
 
     SET @create_airplane_model_view = CONCAT(
         'CREATE VIEW ', @airplane_model_view_name, ' AS
-        SELECT A.model, A.economySeats, A.premiumEconomySeats, A.businessClassSeats, A.firstClassSeats, A.maxweight
-        FROM AirplaneModel A
-        JOIN Airplane ON Airplane.model = A.model
+        SELECT AM.model, AM.economySeats, AM.premiumEconomySeats, AM.businessClassSeats, AM.firstClassSeats, AM.maxweight
+        FROM AirplaneModel AM
+        JOIN Airplane A ON A.model = AM.model
         WHERE A.airline = ', QUOTE(airline), ';'
     );
 
     SET @grant_airplane_view = CONCAT(
-        'GRANT SELECT, INSERT, DELETE ON project2.', airplane_view_name, ' TO ', QUOTE(airline_acronym), ';'
+        'GRANT SELECT, INSERT, DELETE ON project2.', @airplane_view_name, ' TO ', QUOTE(airline_acronym), ';'
     );
 
     SET @grant_airplane_model_view = CONCAT(
-        'GRANT SELECT, INSERT, DELETE ON project2.', airplane_model_view_name, ' TO ', QUOTE(airline_acronym), ';'
+        'GRANT SELECT, INSERT, DELETE ON project2.', @airplane_model_view_name, ' TO ', QUOTE(airline_acronym), ';'
     );
 
     PREPARE create_airplane_stmt FROM @create_airplane_view;
@@ -206,4 +205,21 @@ BEGIN
 
    CALL create_airline_views(airline);
 END; 
+//
+
+--------------------------------------
+-----Airline user account revoke------
+--------------------------------------
+DELIMITER //
+CREATE PROCEDURE on_airline_delete(IN airline VARCHAR(64))
+BEGIN
+    DECLARE acronym_airline VARCHAR(32);
+    SET acronym_airline = acronymize(airline);
+
+    SET @revoke_query = CONCAT('REVOKE ''airline'' FROM ', QUOTE(acronym_airline), ';');
+
+    PREPARE revoke_stmt FROM @revoke_query;
+    EXECUTE revoke_stmt;
+    DEALLOCATE PREPARE revoke_stmt;
+END;
 //
