@@ -20,13 +20,13 @@ BEGIN
         SELECT *,
         FROM Reservation R JOIN User_ U
         ON R.uemail = U.uemail
-        WHERE U.uemail = ', user_email,';',
+        WHERE U.uemail = ', QUOTE(user_email),';',
 	'CREATE VIEW', @passenger_view, 'AS 
 	SELECT passportID, cin, pfirstName AS firstName, plastName AS lastName, phoneNumber, pbirthDate AS birthDate
 	FROM Passenger P JOIN Ticket T ON T.passportID = P.passportID
 	JOIN Reservation R ON R.rid = T.rid
 	JOIN User_ U ON U.uemail = R.email
-	WHERE U.uemail = ', user_email, ';');
+	WHERE U.uemail = ', QUOTE(user_email), ';');
 
     SET @grant_user = CONCAT('GRANT SELECT, INSERT, UPDATE, DELETE ON project2.', @reservation_view, " TO ",user_email, ';',
 	    		    'GRANT SELECT, INSERT, UPDATE, DELETE ON project2.', @passenger_view, " TO ",user_email, ';');
@@ -72,9 +72,17 @@ END;
 DELIMITER //
 CREATE PROCEDURE on_user_delete(IN user_email VARCHAR(32))
 BEGIN
-    SET @revoke_delete_query = CONCAT('REVOKE ''user'' FROM ', QUOTE(user_email), ';DROP USER ', QUOTE(user_email));
-    PREPARE revoke_stmt FROM @revoke_delete_query;
+    DECLARE user_name VARCHAR(32);
+    SET user_name = REPLACE( REPLACE(user_email, '@',''), '.', '');
+    SET @revoke_query = CONCAT('REVOKE ''user'' FROM ', QUOTE(user_name), ';');
+    SET @drop_query = CONCAT('DROP USER ', QUOTE(user_name));
+
+    PREPARE revoke_stmt FROM @revoke_query;
     EXECUTE revoke_stmt;
+    DEALLOCATE PREPARE revoke_stmt;
+
+    PREPARE drop_stmt FROM @drop_query;
+    EXECUTE drop_stmt;
     DEALLOCATE PREPARE revoke_stmt;
 END;
 //
@@ -115,7 +123,7 @@ BEGIN
     SET @airplane_model_view_name = CONCAT(airline_acronym, 'AirplaneModelView');
 
 
-    SET @ViewQuery = CONCAT('CREATE VIEW ', @airplane_view_name, ' AS
+    SET @create_airline_view = CONCAT('CREATE VIEW ', @airplane_view_name, ' AS
         SELECT *
         FROM Airplane
         WHERE Airplane.airline = ', QUOTE(airline), ';',
@@ -126,19 +134,18 @@ BEGIN
         WHERE AirplaneModel.airline = ', QUOTE(airline), ';'
         );
 
-    SET @view_grant = CONCAT(
+    SET @grant_airline = CONCAT(
         'GRANT SELECT, INSERT, DELETE ON project2.', @airplane_view_name, ' TO ', QUOTE(airline_acronym), ';',
         'GRANT SELECT, INSERT, DELETE ON project2.', @airplane_model_view_name, ' TO ', QUOTE(airline_acronym), ';'
     );
 
-    PREPARE stmt FROM @ViewQuery;
+    PREPARE stmt FROM @create_airline_view;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
 
-    PREPARE stmt FROM @view_grant;
+    PREPARE stmt FROM @grant_airline;
     EXECUTE stmt;
     DEALLOCATE PREPARE stmt;
-
 END;
 //
 
