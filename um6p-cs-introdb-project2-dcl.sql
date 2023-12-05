@@ -128,7 +128,7 @@ END;//
 -----Airline user account creation----
 --------------------------------------
 DELIMITER //
-CREATE PROCEDURE CreateAirline(IN airline VARCHAR(64)) -- to call in loop in order to generate airline accounts
+CREATE PROCEDURE CreateAirline(IN airline VARCHAR(64))
 BEGIN
    DECLARE airline_acronym VARCHAR(32);
    SET airline_acronym = acronomize(airline);
