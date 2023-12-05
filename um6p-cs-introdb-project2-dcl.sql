@@ -4,6 +4,9 @@ GRANT SELECT ON project2.Checks TO 'admin';
 GRANT ALL ON project2.Reservation TO 'admin';
 GRANT SELECT ON project2.Flight TO 'user';
 
+-----------------------------------------------------
+-----User account creation on Project2.User_ add-----
+-----------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE on_user_add(IN user_email VARCHAR(32))
 BEGIN
@@ -22,6 +25,9 @@ BEGIN
 END;
 //
 
+-----------------------------------------------------
+-----User account deletion on Project2.User_ delete--
+-----------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE on_user_delete(IN user_email VARCHAR(32))
 BEGIN
@@ -40,6 +46,9 @@ BEGIN
     CALL on_user_delete(OLD.uemail);
 END;//
 
+-----------------------------------------------------
+-----Grant row access on user's reservation----------
+-----------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE CreateReservationView(IN user_email VARCHAR(32))
 BEGIN
@@ -64,7 +73,9 @@ BEGIN
 END //
 DELIMITER ;
 
-
+---------------------------------------------------------------
+-----Grant row access on user's registered passengers----------
+---------------------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE CreatePassengerView(IN user_email VARCHAR(32))
 BEGIN
@@ -90,6 +101,13 @@ BEGIN
 END; 
 // 
 
+--------------------------------------
+-----Airline user account handling----
+--------------------------------------
+/* 
+   Our database's airline names are too long to be put directly
+   as user names, thus the need to acronomize them via this function
+*/
 DELIMITER //
 CREATE FUNCTION acronymize(name VARCHAR(64)) RETURNS VARCHAR(32) DETERMINISTIC
 BEGIN
@@ -105,9 +123,11 @@ BEGIN
 
     RETURN acronomized;
 END;//
-	
-DELIMITER //
 
+--------------------------------------
+-----Airline user account creation----
+--------------------------------------
+DELIMITER //
 CREATE PROCEDURE CreateAirline(IN airline VARCHAR(64)) -- to call in loop in order to generate airline accounts
 BEGIN
    DECLARE airline_acronym VARCHAR(32);
@@ -118,11 +138,11 @@ BEGIN
         GRANT 'airline' TO airline_acronym;
    END IF;
 END; 
-
 //
 
-DELIMITER ;
-
+------------------------------------------------
+-----Grant row access to airline's airplanes----
+------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE CreateAirplaneView(IN airline VARCHAR(64))
 BEGIN
@@ -146,6 +166,9 @@ BEGIN
 END; 
 //
 
+------------------------------------------------------
+-----Grant row access to airline's airplane models----
+------------------------------------------------------
 DELIMITER //
 CREATE PROCEDURE CreateAirplaneModelView(IN airline VARCHAR(64))
 BEGIN
