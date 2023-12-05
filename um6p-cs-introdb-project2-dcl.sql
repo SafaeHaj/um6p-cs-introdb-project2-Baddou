@@ -206,9 +206,11 @@ BEGIN
 END; 
 //
 
+/*
 --------------------------------------
 -----Airline user account revoke------
 --------------------------------------
+*/
 DELIMITER //
 CREATE PROCEDURE on_airline_revoke(IN airline VARCHAR(64))
 BEGIN
