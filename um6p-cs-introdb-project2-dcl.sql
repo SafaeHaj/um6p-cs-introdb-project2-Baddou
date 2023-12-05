@@ -96,6 +96,8 @@ BEGIN
     SET user_name = REPLACE( REPLACE(user_email, '@',''), '.', '');
     SET @revoke_query = CONCAT('REVOKE ''user'' FROM ', QUOTE(user_name), ';');
     SET @drop_query = CONCAT('DROP USER ', QUOTE(user_name), ';');
+    SET @drop_reservation_view = CONCAT('DROP VIEW ', QUOTE(user_name), 'ReservationView;');
+    SET @drop_passenger_view = CONCAT('DROP VIEW ', QUOTE(user_name), 'PassengerView;');
 
     PREPARE revoke_stmt FROM @revoke_query;
     EXECUTE revoke_stmt;
@@ -104,6 +106,14 @@ BEGIN
     PREPARE drop_stmt FROM @drop_query;
     EXECUTE drop_stmt;
     DEALLOCATE PREPARE drop_stmt;
+
+    PREPARE drop_reservation FROM  @drop_reservation_view ;
+    EXECUTE drop_reservation;
+    DEALLOCATE PREPARE drop_reservation;
+
+    PREPARE drop_passenger FROM @drop_passenger_view;
+    EXECUTE drop_passenger;
+    DEALLOCATE PREPARE drop_passenger;
 END;
 //
 	
@@ -219,9 +229,24 @@ BEGIN
     SET acronym_airline = acronymize(airline);
 
     SET @revoke_query = CONCAT('REVOKE ''airline'' FROM ', QUOTE(acronym_airline), ';');
+    SET @delete_query = CONCAT('DROP USER ', QUOTE(acronym_airline), ';');
+    SET @drop_airplane_view = CONCAT('DROP VIEW ', QUOTE(acronym_airline), 'AirplaneView ;');
+    SET @drop_airplanemodel_view = CONCAT('DROP VIEW ', QUOTE(acronym_airline), 'AirplaneModelView ;');
 
     PREPARE revoke_stmt FROM @revoke_query;
     EXECUTE revoke_stmt;
     DEALLOCATE PREPARE revoke_stmt;
+
+    PREPARE delete_stmt FROM @delete_query;
+    EXECUTE delete_stmt;
+    DEALLOCATE PREPARE delete_stmt;
+
+    PREPARE drop_airplane FROM @drop_airplane_view;
+    EXECUTE drop_airplane;
+    DEALLOCATE PREPARE drop_airplane;
+
+    PREPARE drop_airplanemodel FROM @drop_airplanemodel_view;
+    EXECUTE drop_airplanemodel;
+    DEALLOCATE PREPARE drop_airplanemodel;
 END;
 //
