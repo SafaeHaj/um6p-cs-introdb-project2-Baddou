@@ -27,17 +27,17 @@ CREATE TABLE Airplane(
     airline VARCHAR(64) NOT NULL,
     model VARCHAR(20) NOT NULL,
     PRIMARY KEY (registrationNumber),
-    FOREIGN KEY (model) REFERENCES AirplaneModel(model) ON DELETE no action
+    FOREIGN KEY (model) REFERENCES AirplaneModel(model) ON DELETE NO ACTION
     ON UPDATE CASCADE
 );
 
-CREATE TABLE Reservation (
+CREATE TABLE Reservation(
     rid VARCHAR(20) NOT NULL,
     dateReservation DATETIME NOT NULL,
     dateConfirmation DATETIME ,
     email VARCHAR(32) NOT NULL,
     PRIMARY KEY (rid),
-    FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE no action,
+    FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE NO ACTION,
     CHECK (dateReservation < dateConfirmation),
     CHECK (DATEDIFF(dateConfirmation, dateReservation) <= 1)
 );
@@ -56,7 +56,7 @@ CREATE TABLE Flight(
 
 CREATE TABLE FidelityCard(
     fctype VARCHAR(20) ,
-    reduction INT  CHECK (reduction BETWEEN 0 AND 100),
+    reduction INT  CHECK (reduction BETWEEN 0 AND 70),
     PRIMARY KEY (fctype)
 );
 
@@ -64,7 +64,7 @@ CREATE TABLE PassengerCard(
     fcid VARCHAR(64),
     fctype VARCHAR(20),
     PRIMARY KEY (fcid),
-    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete cascade
+    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) ON DELETE CASCADE
 );
 
 CREATE TABLE Passenger(
@@ -76,7 +76,7 @@ CREATE TABLE Passenger(
     plastName VARCHAR(32) NOT NULL,
     fcid VARCHAR(64),
     PRIMARY KEY (passportID),
-    FOREIGN KEY (fcid) REFERENCES PassengerCard(fcid) on delete set null
+    FOREIGN KEY (fcid) REFERENCES PassengerCard(fcid) ON DELETE SET NULL
 );
 
 CREATE TABLE Ticket(
@@ -89,19 +89,18 @@ CREATE TABLE Ticket(
     fctype VARCHAR(20) ,
     class VARCHAR(20) NOT NULL,
     PRIMARY KEY (tid),
-    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) on delete set null,
-    FOREIGN KEY (passportID) REFERENCES Passenger(passportID) on delete cascade,
-    FOREIGN KEY (rid) REFERENCES Reservation(rid)on delete cascade,
-    FOREIGN KEY (fid) REFERENCES Flight(fid) on delete no action
+    FOREIGN KEY (fctype) REFERENCES FidelityCard(fctype) ON DELETE SET NULL,
+    FOREIGN KEY (passportID) REFERENCES Passenger(passportID) ON DELETE CASCADE,
+    FOREIGN KEY (rid) REFERENCES Reservation(rid)ON DELETE CASCADE,
+    FOREIGN KEY (fid) REFERENCES Flight(fid) ON DELETE NO ACTION
 );
 
 CREATE TABLE Checks(
     email VARCHAR(32) NOT NULL,
     fid VARCHAR(20) NOT NULL,
     PRIMARY KEY (email, fid),
-    FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE cascade ,
-    
-    FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
+    FOREIGN KEY (email) REFERENCES User_(uemail) ON DELETE CASCADE,
+    FOREIGN KEY (fid) REFERENCES ON DELETE CASCADE
 );
 
 CREATE INDEX uchecks
