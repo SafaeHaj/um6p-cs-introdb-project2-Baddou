@@ -119,6 +119,7 @@ ON Flight(departure, destination, departureTime);
 CREATE INDEX airline_airplane
 ON Airplane(airline);
 
+-- a reservation cannot be valid if it contains only minors or is empty
 DELIMITER //
 CREATE TRIGGER checkValidReservation
 AFTER UPDATE ON Reservation
@@ -138,6 +139,7 @@ BEGIN
 END;
 //
 
+-- check the age of users (NOW() and such functions can't be used within create table statements
 //
 CREATE TRIGGER user_age_check
 BEFORE INSERT ON User_
