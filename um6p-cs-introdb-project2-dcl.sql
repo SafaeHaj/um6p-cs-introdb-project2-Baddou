@@ -15,46 +15,52 @@ CREATE PROCEDURE grant_user_views(IN user_email VARCHAR(32))
 BEGIN
     DECLARE user_name VARCHAR(32);
     SET user_name = REPLACE( REPLACE(user_email, '@',''), '.', '');
-
+    
     SET @reservation_view = CONCAT(user_name, 'ReservationView');
     SET @passenger_view = CONCAT(user_name, 'PassengerView');
 
-    SET @create_reservation_view = CONCAT(
-        'CREATE VIEW ', reservation_view, ' AS
-        SELECT *
-        FROM Reservation R JOIN User_ U
-        ON R.email = U.uemail
+    SET @create_user_view = CONCAT(
+        'CREATE VIEW ', @reservation_view, ' AS
+        SELECT R.rid AS rid, R.dateReservation AS dateReservation, R.dateConfirmation AS dateConfirmation
+        FROM Reservation R 
+        JOIN User_ U ON R.email = U.uemail
         WHERE U.uemail = ', QUOTE(user_email), ';'
     );
 
     SET @create_passenger_view = CONCAT(
-        'CREATE VIEW ', passenger_view, ' AS 
-        SELECT *
-        FROM Passenger P JOIN Ticket T ON T.passportID = P.passportID
+        'CREATE VIEW ', @passenger_view, ' AS 
+	SELECT P.passportID AS passportID, P.cin AS cin, P.pfirstName AS firstName, P.plastName AS lastName, P.phoneNumber AS phoneNumber, P.pbirthDate AS birthDate
+        FROM Passenger P 
+        JOIN Ticket T ON T.passportID = P.passportID
         JOIN Reservation R ON R.rid = T.rid
         JOIN User_ U ON U.uemail = R.email
         WHERE U.uemail = ', QUOTE(user_email), ';'
     );
 
-    SET @grant_reservation_user = CONCAT('GRANT SELECT, INSERT, UPDATE, DELETE ON project2.', @reservation_view, ' TO ',user_name, ';');
-    SET @grant_passenger_user = CONCAT('GRANT SELECT, INSERT, UPDATE, DELETE ON project2.', @passenger_view, ' TO ',user_name, ';');
+	SET @grant_user_reservation = CONCAT(
+		'GRANT SELECT, INSERT, UPDATE, DELETE ON project2.', @reservation_view, ' TO ', QUOTE(user_name), ';'
+	);
 
-    PREPARE create_rstmt FROM @create_reservation_view;
-    EXECUTE create_rstmt;
-    DEALLOCATE PREPARE create_rstmt;
+	SET @grant_user_passenger = CONCAT(
+		'GRANT SELECT, INSERT, UPDATE, DELETE ON project2.', @passenger_view, ' TO ', QUOTE(user_name), ';'
+	);
 
-    PREPARE create_pstmt FROM @create_passenger_view;
-    EXECUTE create_pstmt;
-    DEALLOCATE PREPARE create_pstmt;
+    PREPARE create_stmt FROM @create_user_view;
+    EXECUTE create_stmt;
+    DEALLOCATE PREPARE create_stmt;
 
-    PREPARE grant_rstmt FROM @grant_reservation_user;
-    EXECUTE grant_rstmt;
-    DEALLOCATE PREPARE grant_rstmt;
+    PREPARE create_passenger_stmt FROM @create_passenger_view;
+    EXECUTE create_passenger_stmt;
+    DEALLOCATE PREPARE create_passenger_stmt;
 
-    PREPARE grant_pstmt FROM @grant_passenger_user;
-    EXECUTE grant_pstmt;
-    DEALLOCATE PREPARE grant_pstmt;
-END // 
+	PREPARE grant_reservation_stmt FROM @grant_user_reservation;
+	EXECUTE grant_reservation_stmt;
+	DEALLOCATE PREPARE grant_reservation_stmt;
+
+	PREPARE grant_passenger_stmt FROM @grant_user_passenger;
+	EXECUTE grant_passenger_stmt;
+	DEALLOCATE PREPARE grant_passenger_stmt;
+END //
 /*
 -------------------------------
 -----User account creation-----
@@ -142,15 +148,15 @@ BEGIN
         'CREATE VIEW ', @airplane_view_name, ' AS
         SELECT *
         FROM Airplane
-        WHERE Airplane.airline = ', QUOTE(airline)
+        WHERE Airplane.airline = ', QUOTE(airline), ';'
     );
 
     SET @create_airplane_model_view = CONCAT(
         'CREATE VIEW ', @airplane_model_view_name, ' AS
-        SELECT *
-        FROM AirplaneModel
-        JOIN Airplane ON Airplane.model = AirplaneModel.model
-        WHERE AirplaneModel.airline = ', QUOTE(airline)
+        SELECT A.model, A.economySeats, A.premiumEconomySeats, A.businessClassSeats, A.firstClassSeats, A.maxweight
+        FROM AirplaneModel A
+        JOIN Airplane ON Airplane.model = A.model
+        WHERE A.airline = ', QUOTE(airline), ';'
     );
 
     SET @grant_airplane_view = CONCAT(
