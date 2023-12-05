@@ -193,12 +193,16 @@ CREATE PROCEDURE create_airline(IN airline VARCHAR(64), IN airline_password VARC
 BEGIN
    DECLARE acronym_airline VARCHAR(32);
    SET acronym_airline = acronymize(airline);
-   SET @create_airline_query = CONCAT('CREATE USER ', QUOTE(acronym_airline), '@\'%\' IDENTIFIED BY ', QUOTE(airline_password), ';
-	GRANT ''airline'' TO ', QUOTE(acronym_airline));
+   SET @create_airline_query = CONCAT('CREATE USER ', QUOTE(acronym_airline), '@\'%\' IDENTIFIED BY ', QUOTE(airline_password), ';');
+   SET @create_grant = CONCAT('GRANT ''airline'' TO ', QUOTE(acronym_airline), ';');
 
    PREPARE create_airline_stmt FROM @create_airline_query;
    EXECUTE create_airline_stmt;
    DEALLOCATE PREPARE create_airline_stmt;
+
+   PREPARE grant_stmt FROM @create_grant;
+   EXECUTE grant_stmt;
+   DEALLOCATE PREPARE grant_stmt;
 
    CALL create_airline_views(airline);
 END; 
