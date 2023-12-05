@@ -1,0 +1,111 @@
+mysql> use project2;
+Database changed
+mysql> source C:\Users\UM6P\Downloads\um6p-cs-introdb-project2-dcl.sql
+Query OK, 0 rows affected (0.01 sec)
+Query OK, 0 rows affected (0.01 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.00 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CALL on_user_add('mohammed@example.net', 'verysecret');
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> SELECT user FROM mysql.user;
++---------------------------+
+| user                      |
++---------------------------+
+| admin                     |
+| mohammedexamplenet        |
+| user                      |
+| mysql.infoschema          |
+| mysql.session             |
+| mysql.sys                 |
+| root                      |
++---------------------------+
+7 rows in set (0.00 sec)
+
+mysql> show tables WHERE Tables_in_project2 LIKE '%view%';
++-----------------------------------+
+| Tables_in_project2                |
++-----------------------------------+
+| mohammedexamplenetpassengerview   |
+| mohammedexamplenetreservationview |
++-----------------------------------+
+2 rows in set (0.01 sec)
+
+mysql> CALL on_user_delete('mohammed@example.net');
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT user FROM mysql.user;
++---------------------------+
+| user                      |
++---------------------------+
+| admin                     |
+| user                      |
+| mysql.infoschema          |
+| mysql.session             |
+| mysql.sys                 |
+| root                      |
++---------------------------+
+6 rows in set (0.00 sec)
+
+mysql> CALL create_airline('Royal Air Maroc', 'megasecret');
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> SELECT user FROM mysql.user;
++---------------------------+
+| user                      |
++---------------------------+
+| ROYALAIRMAROC             |
+| admin                     |
+| user                      |
+| mysql.infoschema          |
+| mysql.session             |
+| mysql.sys                 |
+| root                      |
++---------------------------+
+7 rows in set (0.00 sec)
+
+mysql> show tables WHERE Tables_in_project2 LIKE '%view%';
++-----------------------------------+
+| Tables_in_project2                |
++-----------------------------------+
+| royalairmarocairplanemodelview    |
+| royalairmarocairplaneview         |
++-----------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT Db, Table_name FROM mysql.tables_priv WHERE User = 'ROYALAIRMAROC';
++----------+--------------------------------+
+| Db       | Table_name                     |
++----------+--------------------------------+
+| project2 | royalairmarocairplanemodelview |
+| project2 | royalairmarocairplaneview      |
++----------+--------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> CALL on_airline_revoke('Royal Air Maroc');
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT user FROM mysql.user;
++---------------------------+
+| user                      |
++---------------------------+
+| admin                     |
+| user                      |
+| mysql.infoschema          |
+| mysql.session             |
+| mysql.sys                 |
+| root                      |
++---------------------------+
+6 rows in set (0.00 sec)
+
