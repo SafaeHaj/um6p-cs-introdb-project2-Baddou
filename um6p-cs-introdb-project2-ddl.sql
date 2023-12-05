@@ -46,8 +46,8 @@ CREATE TABLE Flight(
     fid VARCHAR(20) NOT NULL,
     arrivalTime DATETIME NOT NULL,
     departureTime DATETIME NOT NULL,
-    destination VARCHAR(20) NOT NULL,
-    departure VARCHAR(20) NOT NULL,
+    destination VARCHAR(64) NOT NULL,
+    departure VARCHAR(64) NOT NULL,
     registrationNumber INT NOT NULL,
     PRIMARY KEY (fid),
     FOREIGN KEY (registrationNumber) REFERENCES Airplane(registrationNumber) ON DELETE CASCADE
