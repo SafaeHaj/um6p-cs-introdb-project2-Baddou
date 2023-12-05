@@ -3,7 +3,6 @@ CREATE ROLE 'user', 'airline', 'admin';
 GRANT ALL ON project2.* TO 'admin';
 GRANT SELECT ON project2.Flight TO 'user';
 
-
 /*
 ------------------------------------
 -----User account handling----------
@@ -59,7 +58,7 @@ BEGIN
     PREPARE grant_passenger_stmt FROM @grant_user_passenger;
     EXECUTE grant_passenger_stmt;
     DEALLOCATE PREPARE grant_passenger_stmt;
-END //
+END; //
 /*
 -------------------------------
 -----User account creation-----
