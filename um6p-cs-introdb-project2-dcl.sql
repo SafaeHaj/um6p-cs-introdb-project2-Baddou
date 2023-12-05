@@ -75,7 +75,7 @@ BEGIN
     DECLARE user_name VARCHAR(32);
     SET user_name = REPLACE( REPLACE(user_email, '@',''), '.', '');
     SET @revoke_query = CONCAT('REVOKE ''user'' FROM ', QUOTE(user_name), ';');
-    SET @drop_query = CONCAT('DROP USER ', QUOTE(user_name));
+    SET @drop_query = CONCAT('DROP USER ', QUOTE(user_name), ';');
 
     PREPARE revoke_stmt FROM @revoke_query;
     EXECUTE revoke_stmt;
@@ -83,7 +83,7 @@ BEGIN
 
     PREPARE drop_stmt FROM @drop_query;
     EXECUTE drop_stmt;
-    DEALLOCATE PREPARE revoke_stmt;
+    DEALLOCATE PREPARE drop_stmt;
 END;
 //
 	
