@@ -158,3 +158,16 @@ FROM Passenger
 JOIN Ticket ON Passenger.passportID = Ticket.passportID
 JOIN Flight ON Ticket.fid = Flight.fid
 WHERE Flight.fid = 'OP340';
+
+
+-- 2 Inserts:
+INSERT INTO user_ (uemail, ufirstName, ulastName, ubirthDate, passwordHash) VALUES ('kathleen6@example.org', 'Michael', 'Crawford', '1990-03-17', '&0YZKXhFbx');
+INSERT INTO checks (email, fid) VALUES ('kathleen6@example.org', 'HB481');
+
+-- 2 Updates:
+UPDATE user_ SET ufirstName= 'Micheal' WHERE uemail ='kathleen66@example.org';
+UPDATE user_ SET passwordHash= 'database123' WHERE uemail ='kathleen66@example.org';
+
+-- 2 deletions:
+DELETE FROM user_ WHERE uemail = 'kathleen6@example.org';
+DELETE FROM passenger WHERE passportID = 'YRDJZCD9';
