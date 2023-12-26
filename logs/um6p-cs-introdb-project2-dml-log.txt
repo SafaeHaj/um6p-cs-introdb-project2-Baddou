@@ -1,0 +1,394 @@
+mysql> USE Air_SQL;
+Database changed
+mysql> SELECT
+    ->     Flight.fid,
+    ->     Flight.destination,
+    ->     Flight.departureTime,
+    ->     COUNT(Ticket.tid) AS bookedSeats,
+    ->     AirplaneModel.economySeats - COUNT(Ticket.tid) AS availableSeats
+    -> FROM Flight
+    -> LEFT JOIN Ticket ON Flight.fid = Ticket.fid
+    -> JOIN Airplane ON Flight.registrationNumber = Airplane.registrationNumber
+    -> JOIN AirplaneModel ON AirplaneModel.model = Airplane.model
+    -> WHERE DATEDIFF(Flight.departureTime, NOW()) > 0
+    -> GROUP BY Flight.fid, Flight.destination, Flight.departureTime, AirplaneModel.economySeats
+    -> HAVING availableSeats > 0
+    -> ORDER BY Flight.departureTime ASC;
++-----+-----------------------------+---------------------+-------------+----------------+
+| fid | destination                 | departureTime       | bookedSeats | availableSeats |
++-----+-----------------------------+---------------------+-------------+----------------+
+| RD1 | Lea County Regional Airport | 2024-11-05 14:02:32 |           1 |             71 |
+| 1U2 | Torsby Airport              | 2024-11-22 04:03:22 |           0 |             89 |
++-----+-----------------------------+---------------------+-------------+----------------+
+2 rows in set (0.35 sec)
+
+mysql> SELECT
+    ->     Flight.destination,
+    ->     COUNT(Ticket.tid) AS ticketCount
+    -> FROM Flight
+    -> LEFT JOIN Ticket ON Flight.fid = Ticket.fid
+    -> GROUP BY Flight.destination
+    -> ORDER BY ticketCount DESC
+    -> LIMIT 5;
++---------------------------------+-------------+
+| destination                     | ticketCount |
++---------------------------------+-------------+
+| Telfer Airport                  |           5 |
+| Jefferson City Memorial Airport |           5 |
+| Porto Seguro Airport            |           5 |
+| Kiruna Airport                  |           4 |
+| Zhuhai Jinwan Airport           |           4 |
++---------------------------------+-------------+
+5 rows in set (0.01 sec)
+
+mysql> SELECT
+    ->     User_.uemail,
+    ->     User_.ufirstName,
+    ->     User_.ulastName
+    -> FROM User_
+    -> JOIN Reservation ON User_.uemail = Reservation.email
+    -> JOIN Ticket ON Reservation.rid = Ticket.rid
+    -> JOIN Flight ON Ticket.fid = Flight.fid
+    -> GROUP BY User_.uemail, User_.ufirstName, User_.ulastName
+    -> HAVING COUNT(DISTINCT Flight.destination) > 1;
++----------------------------------+-------------+------------+
+| uemail                           | ufirstName  | ulastName  |
++----------------------------------+-------------+------------+
+| adamskeith@example.org           | Patricia    | Ward       |
+| alexanderashley@example.com      | Gloria      | Diaz       |
+| alfredsteele@example.com         | Michele     | Tyler      |
+| amysanders@example.net           | Stephen     | Munoz      |
+| andersonholly@example.net        | Morgan      | Garcia     |
+| andreahouston@example.com        | Sara        | Stephens   |
+| andresingh@example.com           | Kayla       | Thompson   |
+| angelacooper@example.net         | Savannah    | Bradshaw   |
+| anthonybean@example.org          | Jillian     | Fox        |
+| aprilestrada@example.net         | Lisa        | Yang       |
+| armstrongdale@example.org        | Isabel      | Shelton    |
+| ashley79@example.com             | Michael     | Ramirez    |
+| bjones@example.com               | Katrina     | Villa      |
+| bprice@example.net               | Alexander   | Adkins     |
+| brandonparker@example.com        | Laura       | Mills      |
+| bridget53@example.net            | Donna       | Graham     |
+| bruce81@example.net              | Denise      | Martinez   |
+| caitlinfrench@example.net        | Kayla       | Sanders    |
+| castillomichael@example.net      | Dylan       | Prince     |
+| christinawashington@example.com  | William     | Herring    |
+| colemanmichael@example.com       | Brian       | Chang      |
+| dana62@example.org               | Rebecca     | Garcia     |
+| deannajones@example.com          | Luis        | Perez      |
+| dlopez@example.com               | Mary        | Wilkinson  |
+| eellison@example.net             | Travis      | Hughes     |
+| emily45@example.net              | Sean        | Silva      |
+| ericaallison@example.net         | James       | Phillips   |
+| erin13@example.com               | Eric        | Wright     |
+| evansmario@example.net           | Jessica     | Harris     |
+| fisherwhitney@example.net        | Stephen     | Nelson     |
+| foxrobert@example.com            | Randy       | French     |
+| frenchmarissa@example.net        | Regina      | Williams   |
+| fritzjennifer@example.com        | Samantha    | Gilbert    |
+| frussell@example.org             | Juan        | Rosales    |
+| ftucker@example.org              | Brian       | Sloan      |
+| fvelazquez@example.com           | Karen       | Dominguez  |
+| gonzalezkathleen@example.net     | Laura       | Ashley     |
+| haleynixon@example.net           | Patrick     | Duran      |
+| hallamy@example.net              | Gwendolyn   | Smith      |
+| hannah10@example.org             | Meredith    | Maddox     |
+| hduncan@example.net              | Brittany    | Brown      |
+| heather24@example.org            | John        | Hill       |
+| heather98@example.org            | Alexander   | Cross      |
+| heatherluna@example.org          | William     | Patton     |
+| heathersmith@example.org         | Thomas      | Wilson     |
+| heidi43@example.net              | Angela      | Thomas     |
+| ievans@example.org               | Stephanie   | Clark      |
+| jacquelineashley@example.org     | Donna       | Tran       |
+| james77@example.net              | Jessica     | Jones      |
+| jamesdeborah@example.org         | Angela      | Blair      |
+| jamesyoung@example.org           | Andrew      | Anderson   |
+| jamie66@example.net              | Jessica     | Wu         |
+| jasonjohnson@example.org         | Timothy     | Farley     |
+| jasonpowers@example.org          | Shelly      | Liu        |
+| jeffreysmith@example.com         | Anthony     | Matthews   |
+| jennifer47@example.net           | David       | Smith      |
+| jenniferbartlett@example.com     | Kelly       | Velez      |
+| jessicalopez@example.com         | Jessica     | Stark      |
+| jkent@example.org                | Joshua      | Johnson    |
+| jmeyer@example.com               | Virginia    | Hartman    |
+| joanerickson@example.com         | Kimberly    | Morris     |
+| johnsonchad@example.com          | Courtney    | Harris     |
+| jsaunders@example.org            | Richard     | Pham       |
+| jwashington@example.com          | Melinda     | Singh      |
+| kathleen09@example.net           | Cameron     | Lopez      |
+| kevin61@example.net              | Maria       | Perez      |
+| kim37@example.net                | Kyle        | Lloyd      |
+| kimberly24@example.com           | Keith       | Phelps     |
+| kristinawilson@example.org       | Christina   | Roth       |
+| lblankenship@example.org         | William     | Garcia     |
+| lbowman@example.com              | Rachel      | Davidson   |
+| lclayton@example.net             | Gary        | Rocha      |
+| lgriffin@example.com             | Shawn       | Garcia     |
+| lisabowen@example.net            | Andrew      | Mills      |
+| mallorymartinez@example.net      | Jeremiah    | Owens      |
+| margaretfreeman@example.org      | David       | Lozano     |
+| martinezbreanna@example.org      | Rachel      | Hart       |
+| matthewoneal@example.com         | Karen       | Newton     |
+| matthewturner@example.net        | Christopher | Garcia     |
+| mckinneynatalie@example.net      | Alexander   | Washington |
+| melindaleach@example.org         | Mark        | Wright     |
+| micheal06@example.net            | Michael     | Harvey     |
+| millerbrian@example.net          | Kristen     | Davis      |
+| mle@example.org                  | Clarence    | Clark      |
+| moralesronald@example.com        | Riley       | Barnes     |
+| morgan45@example.com             | Jose        | Davis      |
+| morriscindy@example.org          | Luis        | Nelson     |
+| mwagner@example.net              | Kenneth     | Baker      |
+| myerskimberly@example.net        | Theresa     | Hopkins    |
+| nancy21@example.com              | Brian       | Davis      |
+| njohnson@example.com             | Patrick     | Carter     |
+| njones@example.com               | Shelby      | Edwards    |
+| oallen@example.net               | William     | Johnson    |
+| phillipsreginald@example.net     | Dale        | Mccarthy   |
+| powersfrances@example.org        | Jill        | Floyd      |
+| pwhite@example.net               | Nancy       | James      |
+| rachel00@example.net             | Leslie      | Brown      |
+| rachel31@example.org             | Michelle    | Parks      |
+| randy90@example.com              | Rodney      | Horton     |
+| rebeccashort@example.org         | Katherine   | Hull       |
+| reeveswilliam@example.net        | Laura       | Anderson   |
+| rholland@example.com             | Nathan      | Tucker     |
+| robertpalmer@example.net         | Shannon     | Mathews    |
+| rowerobert@example.net           | Kelly       | Hunter     |
+| samuel80@example.org             | Paul        | Farmer     |
+| scott37@example.net              | Melissa     | Johnson    |
+| seancampbell@example.com         | Kenneth     | Davila     |
+| sherrybarrett@example.net        | Danielle    | Hicks      |
+| soliselizabeth@example.com       | Richard     | Fernandez  |
+| sosborn@example.net              | Joseph      | Foster     |
+| stanley21@example.org            | Jane        | Howell     |
+| stephaniewilcox@example.net      | Todd        | Cole       |
+| steven88@example.org             | David       | Cruz       |
+| tcarr@example.com                | Daniel      | Johnson    |
+| teresa35@example.org             | Jennifer    | Stevens    |
+| toddfry@example.net              | Craig       | Martin     |
+| tonya29@example.net              | Betty       | Moore      |
+| tray@example.com                 | Matthew     | Vasquez    |
+| trujillocarmen@example.com       | Michele     | Mcpherson  |
+| turnergregory@example.com        | Edward      | Porter     |
+| uholland@example.net             | Gwendolyn   | Thompson   |
+| unorris@example.net              | Herbert     | Barker     |
+| valentinechristopher@example.net | Daisy       | Sherman    |
+| velezkelli@example.com           | Allison     | Schroeder  |
+| veronicadunn@example.net         | Christopher | Barker     |
+| wangrobert@example.com           | Kimberly    | Miller     |
+| watsonbrittany@example.net       | Vickie      | Chang      |
+| wendycarter@example.com          | Jacqueline  | Ortiz      |
+| william46@example.net            | Bianca      | Peterson   |
+| ydavis@example.com               | Willie      | Conrad     |
+| yfranklin@example.org            | Chris       | Cook       |
+| zunigapaul@example.org           | Charles     | Benson     |
++----------------------------------+-------------+------------+
+132 rows in set (0.26 sec)
+
+mysql> SELECT
+    ->     Flight.fid,
+    ->     Flight.arrivalTime,
+    ->     Flight.departureTime,
+    ->     Flight.destination,
+    ->     Flight.departure,
+    ->     Airplane.registrationNumber,
+    ->     
+    ->     Airplane.airline
+    -> FROM
+    ->     Flight
+    -> JOIN
+    ->     Airplane ON Flight.registrationNumber = Airplane.registrationNumber
+    -> WHERE
+    ->     Airplane.airline = 'International Flying Service'
+    ->     AND Flight.destination = 'Tulsa International Airport'
+    ->     AND Flight.departure = 'Port Lincoln Airport'
+    -> 
+    -> UNION
+    -> 
+    -> SELECT
+    ->     Flight.fid,
+    ->     Flight.arrivalTime,
+    ->     Flight.departureTime,
+    ->     Flight.destination,
+    ->     Flight.departure,
+    ->     Airplane.registrationNumber,
+    -> 
+    ->     Airplane.airline
+    -> FROM
+    ->     Flight
+    -> JOIN
+    ->     Airplane ON Flight.registrationNumber = Airplane.registrationNumber
+    -> 
+    -> WHERE
+    ->     Airplane.airline = 'InteliJet Airways'
+    ->     AND Flight.destination = 'Tulsa International Airport'
+    ->     AND Flight.departure = 'Port Lincoln Airport';
++-------+---------------------+---------------------+-----------------------------+----------------------+--------------------+------------------------------+
+| fid   | arrivalTime         | departureTime       | destination                 | departure            | registrationNumber | airline                      |
++-------+---------------------+---------------------+-----------------------------+----------------------+--------------------+------------------------------+
+| BK202 | 2020-11-08 16:50:20 | 2020-11-08 09:50:20 | Tulsa International Airport | Port Lincoln Airport |                501 | International Flying Service |
+| CW285 | 2020-11-08 16:50:20 | 2020-11-08 09:50:20 | Tulsa International Airport | Port Lincoln Airport |                416 | InteliJet Airways            |
++-------+---------------------+---------------------+-----------------------------+----------------------+--------------------+------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT    
+    -> 	Reservation.email,
+    ->     Reservation.dateReservation,
+    ->     Reservation.dateConfirmation,
+    ->     Passenger.passportID,
+    ->     Passenger.cin,
+    ->     Passenger.pbirthDate,
+    ->     Passenger.phoneNumber,
+    ->     Passenger.pfirstName,
+    ->     Passenger.plastName,
+    ->     Ticket.tid,
+    ->     Ticket.seatNumber,
+    ->     Ticket.class,
+    ->     Ticket.price,
+    ->     Ticket.passportID AS ticketPassportID,
+    ->     Ticket.fid,
+    ->     Ticket.fctype
+    -> FROM
+    ->     Reservation
+    ->     JOIN Ticket ON Reservation.rid = Ticket.rid
+    ->     JOIN Passenger ON Passenger.passportID = Ticket.passportID
+    ->     WHERE Reservation.rid = '10';
++------------------------+---------------------+------------------+------------+------+------------+-------------+------------+-----------+-----+------------+-------+-------+------------------+-------+----------+
+| email                  | dateReservation     | dateConfirmation | passportID | cin  | pbirthDate | phoneNumber | pfirstName | plastName | tid | seatNumber | class | price | ticketPassportID | fid   | fctype   |
++------------------------+---------------------+------------------+------------+------+------------+-------------+------------+-----------+-----+------------+-------+-------+------------------+-------+----------+
+| kathleen09@example.net | 2023-09-28 01:39:29 | NULL             | 0B1T5ZYX   | 2814 | 1981-10-28 | 0757416264  | Robert     | Clay      | 141 |        300 | Y+    |  1129 | 0B1T5ZYX         | NO54  | Explorer |
+| kathleen09@example.net | 2023-09-28 01:39:29 | NULL             | 6E7BHW3N   | 2772 | 1944-08-26 | NULL        | Jonathan   | Andrews   | 253 |        167 | FC    |   143 | 6E7BHW3N         | 8F152 | Explorer |
++------------------------+---------------------+------------------+------------+------+------------+-------------+------------+-----------+-----+------------+-------+-------+------------------+-------+----------+
+2 rows in set (0.04 sec)
+
+mysql>   
+mysql>     
+mysql> -- Reserach-bar-like query for Flight
+mysql> SELECT arrivalTime, departureTime, fid, registrationNumber FROM Flight
+    -> WHERE Flight.destination = 'Ibn Batouta Airport'
+    -> 		AND Flight.departure = 'Henderson Executive Airport';
++---------------------+---------------------+------+--------------------+
+| arrivalTime         | departureTime       | fid  | registrationNumber |
++---------------------+---------------------+------+--------------------+
+| 2020-11-01 18:55:36 | 2020-11-01 08:55:36 | XE79 |                439 |
++---------------------+---------------------+------+--------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT Flight.fid,
+    ->     Flight.arrivalTime,
+    ->     Flight.departureTime,
+    ->     Flight.destination,
+    ->     Flight.departure, 
+    ->     Airplane.model,
+    ->     Airplane.Airline
+    -> FROM
+    -> 	Flight 
+    -> JOIN Airplane ON Flight.registrationNumber = Airplane.registrationNumber
+    -> 
+    -> WHERE Airplane.Airline = 'Japan Airlines'
+    -> OR Airplane.model = 'CRJ9';
++-------+---------------------+---------------------+-----------------------------------+----------------------------------+-------+-------------------------+
+| fid   | arrivalTime         | departureTime       | destination                       | departure                        | model | Airline                 |
++-------+---------------------+---------------------+-----------------------------------+----------------------------------+-------+-------------------------+
+| AK116 | 2020-02-26 20:21:05 | 2020-02-26 13:21:05 | Mammoth Yosemite Airport          | Abeche Airport                   | CRJ9  | Dummy                   |
+| F3436 | 2020-08-07 03:49:53 | 2020-08-06 23:49:53 | Canela Airport                    | French Valley Airport            | CRJ9  | Bering Air              |
+| ON457 | 2022-06-02 07:53:56 | 2022-06-01 17:53:56 | Babanakira Airport                | Carmel Valley                    | CRJ9  | Bering Air              |
+| SC334 | 2020-03-13 05:43:07 | 2020-03-13 05:43:07 | Moma Airport                      | Mtwara Airport                   | CRJ9  | Bering Air              |
+| V3319 | 2020-04-09 19:49:53 | 2020-04-08 19:49:53 | Porto Seguro Airport              | Kotlas Airport                   | CRJ9  | Bering Air              |
+| 1I417 | 2021-09-11 17:28:54 | 2021-09-11 04:28:54 | Vladivostok International Airport | Westchester County Airport       | CRJ9  | Royal Falcon            |
+| N8189 | 2020-05-23 19:50:11 | 2020-05-22 21:50:11 | Melfi Airport                     | Orange-Caritat (BA 115) Air Base | CRJ9  | Voestar                 |
+| AJ129 | 2022-12-21 09:11:45 | 2022-12-20 14:11:45 | Ramsar Airport                    | Mendeleyevo Airport              | CRJ9  | Linea Turistica Aerotuy |
+| FA46  | 2022-05-14 13:28:44 | 2022-05-14 01:28:44 | Forrest City Municipal Airport    | Storuman Airport                 | CRJ9  | SeaPort Airlines        |
+| OI451 | 2022-05-29 22:38:46 | 2022-05-29 08:38:46 | Melbourne International Airport   | Foshan Shadi Airport             | CRJ9  | Palair Macedonia        |
+| MJ284 | 2020-02-18 23:03:13 | 2020-02-18 21:03:13 | Principe Airport                  | Amami Airport                    | CRJ9  | Caspian Airlines        |
+| F6156 | 2022-03-18 18:44:27 | 2022-03-18 05:44:27 | Crested Butte Airpark             | Bucholz Army Air Field           | CRJ9  | Aegean Airlines         |
+| 8O423 | 2022-08-03 20:48:35 | 2022-08-03 18:48:35 | Area De Material Airport          | Prospect Creek Airport           | B744  | Japan Airlines          |
+| 8Q476 | 2022-10-23 21:34:30 | 2022-10-23 00:34:30 | Stornoway Airport                 | Seychelles International Airport | B744  | Japan Airlines          |
+| N1159 | 2021-02-05 02:19:18 | 2021-02-04 16:19:18 | Bradford Regional Airport         | Thaba-Tseka Airport              | CRJ9  | Centavia                |
+| AV364 | 2020-12-21 03:44:51 | 2020-12-20 09:44:51 | Faaite Airport                    | Brive Souillac Airport           | CRJ9  | Air UK                  |
+| C8255 | 2021-02-22 12:40:09 | 2021-02-22 12:40:09 | Mina‡u Airport                    | Minchumina Airport               | CRJ9  | Air UK                  |
+| FI454 | 2020-08-04 03:25:06 | 2020-08-03 03:25:06 | Aitutaki Airport                  | Opinaca Aerodrome                | CRJ9  | Air UK                  |
+| H2201 | 2021-04-03 06:45:31 | 2021-04-02 19:45:31 | Pobedilovo Airport                | Datadawai Airport                | CRJ9  | Air UK                  |
+| LI288 | 2021-11-07 18:08:00 | 2021-11-06 23:08:00 | Dibrugarh Airport                 | Rennes-Saint-Jacques Airport     | CRJ9  | Aero VIP (2D)           |
++-------+---------------------+---------------------+-----------------------------------+----------------------------------+-------+-------------------------+
+20 rows in set (0.13 sec)
+
+mysql> SELECT Flight.fid,
+    ->     Flight.arrivalTime,
+    ->     Flight.departureTime,
+    ->     Flight.destination,
+    ->     Flight.departure,
+    ->     AirplaneModel.maxweight
+    -> FROM Flight
+    -> JOIN Airplane ON Airplane.registrationNumber = Flight.registrationNumber
+    -> JOIN AirplaneModel ON AirplaneModel.model = Airplane.model
+    -> 
+    -> ORDER BY AirplaneModel.maxweight DESC
+    -> LIMIT 5;
++-------+---------------------+---------------------+-------------------------------------------------------------+----------------------------------------------+-----------+
+| fid   | arrivalTime         | departureTime       | destination                                                 | departure                                    | maxweight |
++-------+---------------------+---------------------+-------------------------------------------------------------+----------------------------------------------+-----------+
+| 7K490 | 2021-03-24 06:05:05 | 2021-03-23 22:05:05 | Shelby Airport                                              | Ulyanovsk Baratayevka Airport                |        35 |
+| G8296 | 2020-09-21 17:33:24 | 2020-09-21 08:33:24 | Po‡os de Caldas - Embaixador Walther Moreira Salles Airport | Carnot Airport                               |        35 |
+| F4339 | 2022-11-27 08:11:04 | 2022-11-26 13:11:04 | Shiyan Wudangshan Airport                                   | Maliana airport                              |        35 |
+| J7251 | 2020-02-19 22:27:09 | 2020-02-19 20:27:09 | Hommalinn Airport                                           | John C. Munro Hamilton International Airport |        35 |
+| EN402 | 2023-05-26 18:19:25 | 2023-05-26 02:19:25 | Daniel Z. Romualdez Airport                                 | Great Falls International Airport            |        35 |
++-------+---------------------+---------------------+-------------------------------------------------------------+----------------------------------------------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT R.rid AS ReservationID,
+    -> 		R.email,
+    -> 		SUM(T.price) AS TotalTicketPrice
+    -> FROM Reservation R
+    -> INNER JOIN Ticket T ON R.rid = T.rid
+    -> WHERE R.rid = '100'
+    -> GROUP BY R.rid;
++---------------+----------------------+------------------+
+| ReservationID | email                | TotalTicketPrice |
++---------------+----------------------+------------------+
+| 100           | ericking@example.com |              981 |
++---------------+----------------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT 
+    -> 	Passenger.passportID,
+    ->     Passenger.pfirstName,
+    ->     Passenger.plastName,
+    ->     Flight.fid
+    -> FROM Passenger
+    -> JOIN Ticket ON Passenger.passportID = Ticket.passportID
+    -> JOIN Flight ON Ticket.fid = Flight.fid
+    -> WHERE Flight.fid = 'OP340';
++------------+------------+-----------+-------+
+| passportID | pfirstName | plastName | fid   |
++------------+------------+-----------+-------+
+| OIMZNAVX   | Jamie      | Burgess   | OP340 |
+| UNKBXH7Z   | Paula      | Brown     | OP340 |
++------------+------------+-----------+-------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO user_ (uemail, ufirstName, ulastName, ubirthDate, passwordHash) VALUES ('kathleen6@example.org', 'Michael', 'Crawford', '1990-03-17', '&0YZKXhFbx');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> INSERT INTO checks (email, fid) VALUES ('kathleen6@example.org', 'HB481');
+Query OK, 1 row affected (0.05 sec)
+
+mysql> UPDATE user_ SET ufirstName= 'Micheal' WHERE uemail ='kathleen66@example.org';
+Query OK, 1 row affected (0.11 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE user_ SET passwordHash= 'database123' WHERE uemail ='kathleen66@example.org';
+Query OK, 1 row affected (0.04 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> DELETE FROM user_ WHERE uemail = 'kathleen6@example.org';
+Query OK, 1 row affected (0.08 sec)
+
+mysql> DELETE FROM passenger WHERE passportID = 'YRDJZCD9';
+Query OK, 1 row affected (0.07 sec)
+
+mysql> \q
