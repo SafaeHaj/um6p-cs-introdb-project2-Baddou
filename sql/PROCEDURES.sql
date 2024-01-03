@@ -13,10 +13,9 @@ BEGIN
 	DECLARE BasePrice FLOAT;
     DECLARE FidelityDiscount FLOAT;
     DECLARE TicketPrice FLOAT;
-    SET BasePrice =( SELECT price 
+    SET BasePrice =( SELECT F.price 
 								FROM Flight F 
-                                JOIN Ticket T ON F.fid = T.fid
-                                WHERE T.class = TicketClass AND T.fid = Fid
+                                WHERE F.fid = Fid
                                 LIMIT 1);
 
     IF FidelityCardType is  NOT NULL THEN 
@@ -25,26 +24,18 @@ BEGIN
 			SET FidelityDiscount = 0;
 		END IF;
                 
-        IF TicketClass = 'business' THEN 
+        IF TicketClass = 'J' THEN 
 			SET TicketPrice = BasePrice -(BasePrice * (FidelityDiscount + 0.1));
             
-		ELSEIF TicketClass = 'first' THEN 
+		ELSEIF TicketClass = 'FC' THEN 
 			SET TicketPrice = BasePrice - (BasePrice * (FidelityDiscount + 0.2));
 		
-        ELSEIF TicketClass = 'premiumEconomy' THEN
+        ELSEIF TicketClass = 'Y+' THEN
 			SET TicketPrice = BasePrice - (BasePrice * (FidelityDiscount + 0.05));
 		ELSE 
 			SET TicketPrice = BasePrice - (BasePrice * FidelityDiscount);
 		END IF;
        
-        SELECT BasePrice, TicketPrice ;
+        SELECT BasePrice, TicketPrice, FidelityDiscount ;
 	END; // 
-    
-   CALL CalculateTicketPrice(
-	 "business",
-    "Gold", 
-	"Z7510"
 ) 
-  
-    
-    
