@@ -38,4 +38,3 @@ BEGIN
        
         SELECT BasePrice, TicketPrice, FidelityDiscount ;
 	END; // 
-) 
