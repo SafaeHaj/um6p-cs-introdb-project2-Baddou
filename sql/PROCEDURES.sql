@@ -1,5 +1,3 @@
-SELECT COALESCE(MAX(seatNumber) + 1, 1) AS nextSeatNumber
-
 USE project2;
 drop procedure if exists CalculateTicketPrice;
 DELIMITER //
