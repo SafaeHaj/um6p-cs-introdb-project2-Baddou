@@ -50,7 +50,7 @@ BEGIN
     select tidExists;
     START TRANSACTION;
     
-    IF reservationExists = 0 AND tidExists=0 THEN 
+    IF reservationExists > 0 AND tidExists=0 THEN 
 		INSERT INTO Ticket (tid, seatNumber, passportID, rid, fid, fctype, class) VALUES (ticketId, seatNumber, passportId, rid1, fid, fctype, ticketClass);  
 	else
 		ROLLBACK;
