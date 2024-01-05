@@ -1,0 +1,133 @@
+/* Reset some default browser styles */
+body, h1, h2, h3, p, img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.root_container {
+    width: 100%;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+   
+    margin: 0;
+   
+}
+
+.header_container {
+    background-color: #19557e;
+    padding: 10px;
+    align-items: center;
+    height: 90px;
+    position: sticky;
+    top: 0;
+}
+
+.signup-container {
+    margin-top: auto; /* Move to the bottom */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 50%;
+    margin-left: 23%;
+    margin-bottom: 20px; /* Add margin-bottom to create space between header and ticket */
+}
+
+/* Other styles remain the same */
+
+/* Other styles remain the same */
+
+
+form {
+
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width:100%;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #2980b9;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #19557e;
+}
+
+.success-message {
+    margin-top: 20px;
+    display: none;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.header_container {
+    background-color: #19557e;
+    padding: 10px;
+    align-items: center;
+    height:90px;
+    margin-bottom: 20px;
+    position:sticky;
+    top:0;
+}
+
+.first_line {
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    height:50%;
+}
+.logo_um6p {
+    width: 150px;
+    height: auto;
+    margin-right: 20px;
+}
+.navbar_logos{
+    display:flex;
+}
+.button1 {
+    background-color: #2980b9; /* Background color for the buttons */
+    color: #fff; /* Text color for the buttons */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border-radius: 5px; /* Add border-radius for rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Add transition for a smooth effect */
+    font-size: 10px;
+    margin-left: 4px;
+    /* Add any additional styling you need */
+}
+
+.button1:hover {
+    background-color: #19557e; /* Change background color on hover */
+}

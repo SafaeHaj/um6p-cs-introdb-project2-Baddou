@@ -1,0 +1,220 @@
+/* Reset some default browser styles */
+body, h1, h2, h3, p, img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+.infos_bottom{
+    max-width: 1200px;
+    
+    margin: 0 auto;
+}
+
+.root_container {
+    height: 100%;
+    margin: 0 ;
+}
+
+.header_container {
+    background-color: #19557e;
+    padding: 10px;
+    align-items: center;
+    height:90px;
+    margin-bottom: 20px;
+    position:sticky;
+    top:0;
+}
+
+.first_line {
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+    height:50%;
+}
+
+.logo_um6p {
+    width: 150px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.navbar_logos{
+    display:flex;
+}
+
+#info_entered_search_bar {
+    font-size: 24px;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    
+}
+
+/* Styling for the features section */
+.features_best_flights {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 40px;
+}
+
+/* Styling for each feature block */
+.features_best_flights_child_blue {
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    flex-grow: 1;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 8px;
+    font-size: 12px; /* Adjusted font size */
+}
+
+.features_best_flights_child {
+    color: #030303;
+    padding: 10px;
+    text-align: center;
+    flex-grow: 1;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 8px;
+    border-color: #555;
+    border: solid;
+    border-width: 1px;
+    font-size: 12px; /* Adjusted font size */
+}
+
+
+/* Styling for the first feature block */
+.features_best_flights_child_blue {
+    background-color: #2980b9;
+}
+
+/* Hover effect for feature blocks */
+.features_best_flights_child:hover {
+    background-color: #2980b9;
+}
+
+
+.flights {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.flights_img_info {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    width: 400px;
+    padding: 20px;
+    border-radius: 5px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column; /* Set flex direction to column */
+    align-items: center; /* Center items horizontally */
+    text-align: center; /* Center text within the container */
+}
+
+
+.flights_img_info:hover {
+    transform: scale(1.05);
+}
+
+.imag_flight_capital, .imag_flight {
+    width: 100%; /* Make images take the full width of the container */
+    height: auto;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.info_ville,
+.info_prix {
+    width: 100%;
+     /* Make both divs take the full width of the container */
+}
+
+h6 {
+    margin: 0;
+    font-size: 20px;
+    color: #333;
+}
+
+p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.taille_petite {
+    font-size: 14px;
+}
+
+
+
+
+/* ... Your existing styles ... */
+
+/* Additional styles for .infos_search_bar */
+.infos_search_bar {
+    display: flex;
+
+   
+    align-items: center;
+    background-color: #fff; /* White background */
+    color: #000; /* Black text color */
+    padding: 15px;
+    border-radius: 5px;
+    margin-left: 25%;
+    margin-top: 5px;
+    width: 50%; /* Adjust the width as needed */
+   /* Set a maximum width if needed */
+    height: 10px; /* Adjust the height as needed */
+}
+
+
+/* Optional: Add styles for text inside the .infos_search_bar */
+.infos_search_bar span {
+    font-size: 18px;
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+}
+
+.search_icon{
+    width: 18px;
+    height:18px;
+    margin-right: 40px;
+}
+
+.seperate_info_price{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    width:100%;
+}
+
+.button {
+    background-color: #2980b9; /* Background color for the buttons */
+    color: #fff; /* Text color for the buttons */
+    padding: 10px 20px; /* Adjust padding as needed */
+    border-radius: 5px; /* Add border-radius for rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Add transition for a smooth effect */
+    font-size: 10px;
+    margin-left: 4px;
+    /* Add any additional styling you need */
+}
+
+.button:hover {
+    background-color: #19557e; /* Change background color on hover */
+}
+
+/* ... Your existing styles ... */

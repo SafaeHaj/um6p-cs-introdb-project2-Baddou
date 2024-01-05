@@ -1,0 +1,130 @@
+:root {
+    --body-color: linear-gradient(to right, #023047, #219EBC);
+}
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', 'Century Gothic';
+    overflow-x: hidden;
+}
+
+header {
+    background: var(--body-color);
+    display: flex;
+    width: 100%;
+    padding: 30px;
+    position: sticky;
+    top: 0;
+}
+
+.title {
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.title-logo {
+    display: flex;
+}
+
+.title-logo img {
+    width: auto;
+    height: 50%;
+}
+
+h1 {
+    color: #FFF9EB;
+    margin-bottom: 0;
+}
+
+p {
+    color: #8ECAE6;
+    font-size: 0.9em;
+}
+
+.account {
+    margin-left: auto;
+    margin-right: 30px;
+    margin-top: 30px;
+}
+
+.orange {background-color: #FB8500;}
+
+.f-orange {color: #FB8500;}
+
+.blue{background-color: #219EBC;}
+
+.darkblue {background-color: #023047;}
+
+.account>button {
+    padding: 10px 25px 10px 25px;
+    border-radius: 10px;
+    font-size: 1em;
+    font-weight: 700;
+    margin-right: 20px;
+}
+
+.account>button {
+    font-family: 'Montserrat', 'Century Gothic';
+    cursor: pointer;
+    color: white;
+    border: 2px solid transparent;
+}
+
+.account>button:hover {
+    border: 2px solid white;
+}
+
+.flightContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: auto 30vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: fit-content;
+    padding: 10px;
+}
+
+.flight{
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.depdest-time{
+    display: flex;
+    gap: min(20%, 10px);
+    justify-content: center;
+    align-items: baseline;
+    margin: auto;
+}
+
+.depdest{
+    font-size: 1em;
+    font-weight: 700;
+    color:#023047;
+}
+
+.time{
+    color:#FB8500;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+.airline{
+    background-color:#219EBC;
+    text-align: center;
+    font-weight: 900;
+}
+
+.airline p{
+    color: #023047;
+    margin-top: min(50%,30px);
+    font-size: 1.4em;
+    margin-bottom: min(50%,30px);
+}
+
+.flightContainer h2{color: #219EBC}
