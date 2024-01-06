@@ -64,11 +64,6 @@ if ($passengercount > $availableSeats ){
             </div>
 
             <p class="additional-info">
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis impedit, ducimus laboriosam animi
-                adipisci fuga incidunt aspernatur non, deserunt, rerum iste ullam. Perferendis unde aspernatur
-                asperiores impedit, itaque sequi aperiam?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis impedit, ducimus laboriosam animi
-                adipisci fuga incidunt aspernatur non, deserunt, rerum iste ullam. Perferendis unde aspernatur
-                asperiores impedit, itaque sequi aperiam?
             </p>
 
             <div class="choose">
