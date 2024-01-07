@@ -50,6 +50,7 @@ CREATE TABLE Flight(
     departure VARCHAR(64) NOT NULL,
     registrationNumber INT NOT NULL,
     price FLOAT NOT NULL,
+    status_ VARCHAR(20) default 'Available',
     PRIMARY KEY (fid),
     FOREIGN KEY (registrationNumber) REFERENCES Airplane(registrationNumber) ON DELETE CASCADE
     ON UPDATE CASCADE
@@ -104,20 +105,6 @@ CREATE TABLE Checks(
     FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
 );
 
-CREATE INDEX uchecks
-ON Checks(email);
-
-CREATE INDEX fticket
-ON Ticket(fid);
-
-CREATE INDEX ureservation
-ON Reservation(email);
-
-CREATE INDEX dep_dest
-ON Flight(departure, destination, departureTime);
-
-CREATE INDEX airline_airplane
-ON Airplane(airline);
 
 -- a reservation cannot be valid if it contains only minors or is empty
 DELIMITER //
