@@ -1,49 +1,49 @@
-# Travel Booking System: Elevating Your Journey
+# Flight Booking System
 
-## Overview
+Welcome to our Flight Booking System! This platform streamlines the flight booking process, providing users with a convenient and user-friendly experience. The system includes secure transactions, comprehensive database management, and efficient installation procedures.
 
-Welcome to our cutting-edge Flight Booking System, meticulously crafted to elevate your travel planning and booking experience. Our system offers a suite of user-facing pages tailored for seamless navigation and an administrative interface empowering airlines to manage their flight information effortlessly.
+## Features:
 
-### User-Facing Pages
+### Efficient Booking Process:
+- Simple and intuitive user interface.
+- Access to a wide range of flights and destinations.
 
-1. **Explore with Precision - Index Page**
-   - Engage effortlessly with our intuitive search functionality, allowing you to input departure details and time seamlessly.
-   - Default search parameters ensure a hassle-free start with options for personalized features through sign-in and log-in forms.
+### Secure Transactions:
+- Integrated payment methods for secure transactions.
+- Encryption and secure protocols to protect user financial information.
 
-2. **Informed Choices - Results Page**
-   - Access a clear and concise list of available flights based on your search criteria.
-   - Each flight entry includes essential details, empowering you to make informed decisions with ease.
+### Comprehensive Database Management:
+- Well-designed structure using Entity-Relationship Diagrams (ERDs).
+- Appropriate indexing for enhanced query performance.
 
-3. **Dive into Details - Flight Details Page**
-   - Immerse yourself in comprehensive information about your chosen flight, including itinerary, class details, amenities, and transparent pricing.
-   - Navigate seamlessly to proceed with booking, modify choices, or explore other options.
+## Installation:
 
-4. **Efficient Booking - Flight Booking Page**
-   - Experience convenience as you input passenger information through dynamic forms.
-   - Witness real-time updates on the total cost, dynamically considering fidelity card reductions.
-   - Review and confirm details before finalizing your booking.
+### Database Setup:
+1. Install MySQL Workbench for database management.
+2. Create the database using the provided DDL script.
+3. Execute DCL script for necessary permissions.
+4. Import relevant data for flights, passengers, and reservations.
 
-5. **Confirmation Excellence - Confirmation and Final Page**
-   - Receive a detailed summary of your booked flight and transparent payment details.
-   - Your unique booking reference is presented upon successful confirmation, ensuring a seamless end to your booking journey.
+### Web Application Setup:
+1. Upload PHP, CSS, HTML, and JavaScript files to your server.
+2. Access the website through a web browser using the server's URL.
+3. Test the functionality to ensure seamless interaction with the MySQL database.
 
-### Administrative Page
+## Usage:
 
-6. **Empowering Airlines - Airlines Management Page**
-   - Tailored for airlines to effortlessly manage their flight information.
-   - Efficient tools for airlines to delete, insert, or update flight details, ensuring accuracy and ease of management.
+### User Registration/Login:
+- Register or log in to access the flight booking system.
 
-## User Experience
+### Flight Selection:
+- Browse available flights, select desired options, and add them to your itinerary.
 
-Our system is designed to provide a positive and efficient user experience, prioritizing a user-friendly interface, flexible default settings, and secure sign-in/log-in mechanisms. The addition of JavaScript suggestions enhances the search process, making navigation intuitive. The user flow, from search to booking confirmation, ensures clarity and transparency at each step.
+### Streamlined Checkout:
+Enter all required details, including class and fidelity card information. The system dynamically calculates the total. Confirm to pay for the reservation or cancel to return to the home page.
 
-## Next Steps: Personalized Recommendations with Machine Learning
+## Contact Information:
 
-Exciting developments are underway! Our Travel Booking System is evolving to harness the power of machine learning. Soon, we'll be using your provided user data to generate personalized recommendations for the best flights and most popular destinations. This intelligent integration aims to optimize your travel planning experience, offering tailored suggestions based on your unique preferences and travel history. Stay tuned for updates as we embark on this journey to redefine your travel experience with intelligence and precision.
-
-
-
-Done for the course: - Database Management I - 
-Academic Year: 2023 / 2024
-
-College of Computing, Mohammed VI Polytechnic University
+For any questions, feedback, or issues related to the Flight Booking System, please contact us at the following emails:
+- KAWTAR.LABZAE@um6p.ma
+- MOUNIA.BADDOU@um6p.ma
+- SAFAE.HAJJOUT@um6p.ma
+- OTHMANE.AZOUBI@um6p.ma
