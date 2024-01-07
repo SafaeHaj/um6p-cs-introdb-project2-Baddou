@@ -18,6 +18,10 @@ Welcome to our Flight Booking System! This platform streamlines the flight booki
 
 ## Installation:
 
+### Data Setup:
+1. Run on Python the file: Dataloader.py
+2. More informations on the Folder: Data in this repo
+
 ### Database Setup:
 1. Install MySQL Workbench for database management.
 2. Create the database using the provided DDL script.
