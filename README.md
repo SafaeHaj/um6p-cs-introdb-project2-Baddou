@@ -2,6 +2,32 @@
 
 Welcome to our Flight Booking System! This platform streamlines the flight booking process, providing users with a convenient and user-friendly experience. The system includes secure transactions, comprehensive database management, and efficient installation procedures.
 
+# Project Directory Structure:
+
+📁 data/
+├── ... (Generated data in CSV file format)
+└── README.md (Instructions on data execution within the project)
+
+📁 datasets/
+└── ... (Realistic data files from Kaggle database)
+
+📁 docs/
+└── ... (Main project report, and previous deliverables' documentation files)
+
+📁 logs/
+└── ... (All logs, deliverable 3's logs are the most recent)
+
+📁 sql/
+└── ... (All MySQL scripts for the application)
+
+── DataGenerator.ipynb
+
+── project2-application.zip
+
+── project2-application-log files (..)
+
+── ERD 
+
 ## Features:
 
 ### Efficient Booking Process:
