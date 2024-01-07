@@ -43,7 +43,7 @@ Exciting developments are underway! Our Travel Booking System is evolving to har
 
 
 
-Done for teh course of - Database Management I - 
+Done for the course: - Database Management I - 
 Academic Year: 2023 / 2024
 
 College of Computing, Mohammed VI Polytechnic University
