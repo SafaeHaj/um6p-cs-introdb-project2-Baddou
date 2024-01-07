@@ -105,7 +105,9 @@ CREATE TABLE Checks(
     FOREIGN KEY (fid) REFERENCES Flight(fid) on delete cascade
 );
 
-
+CREATE INDEX idx_Flight_at ON Flight (arrivalTime);
+CREATE INDEX idx_Flight_dp ON Flight (departureTime);
+CREATE INDEX idx_Flight_dest ON Flight (destination);
 -- a reservation cannot be valid if it contains only minors or is empty
 DELIMITER //
 CREATE TRIGGER checkValidReservation
