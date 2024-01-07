@@ -1,0 +1,88 @@
+﻿Application Log
+Deliverable 3 - Data Management I - 
+________________
+
+
+
+
+User Related Module:
+1. Index: 
+
+
+	1. Search Functionality:
+   		* The index page features a search function that requires users to input their departure destination and departure time.
+   		* Return time is optional, providing flexibility for users in planning their trips.
+   		* JavaScript is utilized to enhance the user experience by offering suggestions based on the entered inputs, making the search process more intuitive and efficient.
+	2. Default Search Parameters:
+   		* The default search parameters are set to 1 adult and 0 children. Users can modify these settings as needed for their travel plans.
+	3. Sign-In and Log-In Forms:
+   		* The index page includes sign-in and log-in forms, allowing users to access personalized features or services.
+   		* Error detection mechanisms are implemented to handle scenarios such as entering an existing email or providing an incorrect password. This ensures a secure and smooth login experience for users.
+	4. User Interaction:
+   		* Users interact with the index page by entering their travel details in the search function or using the sign-in and log-in forms.
+   		* The JavaScript suggestions help users by providing relevant and timely information as they input their travel details.
+	5. Search Result Page:
+   		* Upon hitting the "search" button, users are directed to the next page, likely a search result page.
+   		* This subsequent page likely displays relevant travel options based on the entered criteria, such as available flights.
+	6. Overall User Experience:
+   		* The combination of a user-friendly search function, default parameters, JavaScript suggestions, and secure login forms contributes to an overall positive user experience on the index page.
+
+
+2. Results page:
+  
+
+	1. Flight Listings:
+   		* The Results page presents a comprehensive list of available flights based on the search criteria from the index page.
+   		* Each flight entry includes essential details like departure time, chosen class (e.g., economy, business…), available seats next(144) to each class, and the airline it belongs to.
+	2. Visual Presentation:
+   		* The information is visually presented in a clear and organized manner, making it easy for users to scan through the available options.
+	3. Selection Mechanism:
+   		* Users can select a specific flight directly from the list, indicating their preference for further details or booking.
+	4. Call to Action:
+   		* Clicking on the flight  guides  users to the next step in the booking process.
+
+
+3. Flight Details Page:
+  
+
+	1. Detailed Flight Information:
+   		* Upon selecting a flight on the Results page, users are redirected to the "Flight Details" page.
+   		* This page provides comprehensive information about the chosen flight, including the full flight itinerary, specific departure and arrival times.
+	2. Class and seat Details:
+   		* Users find detailed information about the chosen class, and seat number.
+	3. Booking Options:
+   		* Users have options to proceed with the booking, modify their choices, or return to the results page to explore other flight options.
+	4. Confirmation:
+   		* Before finalizing the booking, users may be prompted to confirm their selections and proceed to the payment page for completing the reservation.
+4. Flight Booking Page:
+
+	1. Passenger Information Forms:
+   		* Users enter passenger information through individual forms, with the number of forms based on the passengers entered during the initial search.
+   		* Each form captures basic attributes following the Entity-Relationship Diagram (ERD).
+   		* The fidelity card (fcid) field is optional and only displayed if the user chooses to enter it.
+	2. Dynamic Form Placement:
+   		* Completed forms are dynamically saved and placed within a div, containing all passenger information.
+   		* The dynamic div ensures clarity and organization, providing a visual representation of entered passenger details.
+	3. Price Update:
+   		* The total cost dynamically updates as users fill in the passenger forms.
+   		* The price calculation considers the entered forms and any fidelity card reductions, resulting in a real-time display of the total cost.
+	4. Information Confirmation:
+   		* Users review and confirm the entered passenger information before proceeding.
+   		* A confirmation step ensures accuracy and allows users to make any necessary adjustments.
+	5. Final Confirmation and Navigation:
+   		* After reviewing and confirming the entered information, users proceed to the final confirmation step.
+   		* Clicking on a "Confirm" button initiates the finalization process, and users are taken to the last page, clicking on "Cancel"  leads to drop the tickets entered in the chart.
+
+
+5. Confirmation and Final Page:
+  
+
+
+
+	1. Summary of Booking:
+		The final page provides a comprehensive summary of the booked flight, including all entered passenger details and the associated cost.
+
+
+Airline Related Module:
+
+The final page of our project is exclusively dedicated to the airline, ensuring restricted access to ordinary users. This secure page grants airline staff the authority to update and delete flights through a user-friendly form. To access this functionality, airline personnel must authenticate themselves using a robust login system, incorporating features like strong password policies and possibly multi-factor authentication for heightened security. Through role-based access control, specific roles such as "Admin" or "Airline Staff" are assigned to distinguish between different levels of users, allowing only authorized staff to make changes. The flight management form, accessible only to authenticated and authorized users, facilitates the seamless updating and deletion of flight details, with built-in validation checks to maintain data accuracy.
